@@ -1,6 +1,7 @@
 {
   "name": "itc-react-movieapp",
   "version": "0.1.0",
+  "homepage": "https://him97.github.io/itc-react-movieApp",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
