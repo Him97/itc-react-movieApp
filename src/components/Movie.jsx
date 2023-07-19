@@ -1,7 +1,7 @@
 import React from "react";
-import { Card, CardHeader, CardBody, CardFooter, Image, Stack, Heading, Text, Tag, List, ListItem } from '@chakra-ui/react'
+import { Card, CardBody, CardFooter, Image, Stack, Heading, Text, Tag } from '@chakra-ui/react'
 
-function Movie(props) {
+export default function Movie(props) {
     return (
         <Card
             direction={{ base: 'column', sm: 'row' }}
@@ -18,15 +18,9 @@ function Movie(props) {
                     <Text py='2'>{props.movie.plot}</Text>
                 </CardBody>
                 <CardFooter>
-                    <Tag size='md' variant='solid' colorScheme='teal'>
-                        <List>
-                            {props.movie.genres.map((genre) => (<ListItem>{genre}</ListItem>))}
-                        </List>
-                    </Tag>
+                    {props.movie.genres.map((genre) => (<Tag size='md' variant='solid' colorScheme='teal'>{genre}</Tag>))}
                 </CardFooter>
             </Stack>
         </Card>
     );
 }
-
-export default Movie;

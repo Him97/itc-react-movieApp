@@ -25,22 +25,26 @@ const initialMovies = [{
 }
 ];
 
-function MovieList(props) {
+export default function MovieList(props) {
     const [movies, setMovies] = useState(initialMovies);
-    const [filtered, setFiltered] = useState('')
+    const [filterComedy, setFilterComedy] = useState(false)
+    const [filterByName, setFilterByName] = useState('')
 
-    function handlleChange(e) {
-        const filteredSearch = initialMovies.filter(movie => movie.name.includes(e.target.value));
-        setMovies(filteredSearch)
+    function handleChange(e) {
+        setFilterByName(e.target.value);
+        const searchResults = initialMovies.filter((movie) =>
+            movie.name.toLowerCase().includes(filterByName.toLowerCase())
+        );
+        setMovies(searchResults);
     }
 
-    const filterOnlyComedy = () => {
-        if (filtered) {
+    const handleClick = () => {
+        if (filterComedy === true) {
             setMovies(initialMovies);
-            setFiltered(false);
+            setFilterComedy(false);
         } else {
             setMovies(movies.filter((movie) => movie.genres.includes("Comedy")));
-            setFiltered(true);
+            setFilterComedy(true);
         }
     }
 
@@ -54,8 +58,8 @@ function MovieList(props) {
                     <Heading><Center>Movie List</Center></Heading>
                 </Box>
                 <Box display='flex' alignItems='baseline'>
-                    <Input type="text" placeholder="Filter Movies..." value={filtered} onChange={handlleChange}></Input>
-                    <Button onClick={filterOnlyComedy} >Toggle Only Comedy</Button>
+                    <Input type="text" placeholder="Filter Movies..." onChange={handleChange}></Input>
+                    <Button onClick={handleClick} colorScheme='teal' variant='solid'>Toggle Comedy</Button>
                 </Box>
                 <Box>
                     {movies.map((movie) => (
@@ -66,5 +70,3 @@ function MovieList(props) {
         </Container>
     )
 }
-
-export default MovieList;
