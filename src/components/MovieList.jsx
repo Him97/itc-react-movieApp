@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Movie from "./Movie";
-import { Container, Heading, VStack, StackDivider, Box, Input, Button, Center } from '@chakra-ui/react'
+import { Container, Heading, VStack, StackDivider, Box, Input, Button, Center, Alert, AlertIcon } from '@chakra-ui/react'
 
 
 const initialMovies = [{
@@ -29,6 +29,7 @@ export default function MovieList(props) {
     const [movies, setMovies] = useState(initialMovies);
     const [filterComedy, setFilterComedy] = useState(false)
     const [filterByName, setFilterByName] = useState('')
+    const [inputError, setInputError] = useState(false);
 
     function handleChange(e) {
         setFilterByName(e.target.value);
@@ -48,6 +49,15 @@ export default function MovieList(props) {
         }
     }
 
+    useEffect(() => {
+        if (filterByName.startsWith('.') || filterByName.length < 3) {
+            setInputError(true)
+        } else {
+            setMovies(initialMovies.filter((movie) => movie.name.toLocaleLowerCase().includes(filterByName.toLocaleLowerCase())))
+            setInputError(false)
+        }
+    }, [filterByName])
+
     return (
         <Container maxW='container.sm'>
             <VStack
@@ -59,6 +69,12 @@ export default function MovieList(props) {
                 </Box>
                 <Box display='flex' alignItems='baseline'>
                     <Input type="text" placeholder="Filter Movies..." onChange={handleChange}></Input>
+                    {inputError ?
+                        <Alert status='error'>
+                            <AlertIcon />
+                            There was an error processing your request
+                        </Alert>
+                        : null}
                     <Button onClick={handleClick} colorScheme='teal' variant='solid'>Toggle Comedy</Button>
                 </Box>
                 <Box>
