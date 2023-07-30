@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import UserNameContext from "../context/UserNameContext";
 import Movie from "./Movie";
 import { Container, Heading, VStack, StackDivider, Box, Input, Button, Center, Alert, AlertIcon } from '@chakra-ui/react'
 
@@ -30,6 +31,7 @@ export default function MovieList(props) {
     const [filterComedy, setFilterComedy] = useState(false)
     const [filterByName, setFilterByName] = useState('')
     const [inputError, setInputError] = useState(false);
+    const { userName, setUserName } = useContext(UserNameContext)
 
     function handleChange(e) {
         setFilterByName(e.target.value);
@@ -66,6 +68,10 @@ export default function MovieList(props) {
                 align='stretch' >
                 <Box>
                     <Heading><Center>Movie List</Center></Heading>
+                </Box>
+                <Box>
+                    <h2>Hello {userName}</h2>
+                    <Input onChange={(e) => setUserName(e.target.value)}></Input>
                 </Box>
                 <Box display='flex' alignItems='baseline'>
                     <Input type="text" placeholder="Filter Movies..." onChange={handleChange}></Input>
