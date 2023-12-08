@@ -2,12 +2,12 @@ import * as React from 'react';
 import {
 	AppBar,
 	Box,
-	Button,
 	Container,
 	IconButton,
 	Link,
 	Menu,
 	MenuItem,
+	NativeSelect,
 	Toolbar,
 	Tooltip,
 	Typography,
@@ -17,13 +17,25 @@ import HandshakeIcon from '@mui/icons-material/Handshake';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { useTheme } from '@mui/material/styles';
+import { useTranslation } from 'react-i18next';
+import i18n from '../utils/i18n';
 
-const pages = ['Home', 'Pricing', 'About Us'];
+const pages = ['Home', 'Services', 'About'];
 
 export default function Navbar({ colorMode }) {
+	const { t } = useTranslation();
+	const theme = useTheme();
+
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
 		null
 	);
+	const [language, setLanguage] = React.useState<string>('en');
+
+	const chooseLanguage = (e) => {
+		e.preventDefault();
+		i18n.changeLanguage(e.target.value);
+		setLanguage(e.target.value);
+	};
 
 	const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorElNav(event.currentTarget);
@@ -32,8 +44,6 @@ export default function Navbar({ colorMode }) {
 	const handleCloseNavMenu = () => {
 		setAnchorElNav(null);
 	};
-
-	const theme = useTheme();
 
 	return (
 		<AppBar
@@ -68,7 +78,7 @@ export default function Navbar({ colorMode }) {
 							textDecoration: 'none',
 						}}
 					>
-						Zeleze
+						{t('zeleze')}
 					</Typography>
 
 					<Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -139,7 +149,7 @@ export default function Navbar({ colorMode }) {
 							textDecoration: 'none',
 						}}
 					>
-						Zeleze
+						{t('zeleze')}
 					</Typography>
 					<Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
 						{pages.map((page) => (
@@ -160,6 +170,31 @@ export default function Navbar({ colorMode }) {
 					</Box>
 
 					<Box sx={{ flexGrow: 0 }}>
+						<NativeSelect
+							defaultValue='Select Language'
+							inputProps={{
+								name: 'adoption_status',
+								id: 'adoption_status',
+							}}
+							onChange={chooseLanguage}
+							color='success'
+						>
+							<option disabled style={{ textAlign: 'center' }}>
+								{t('t-select-lang')}
+							</option>
+							<option value={'en'} style={{ textAlign: 'center' }}>
+								English
+							</option>
+							<option value={'zh_hans'} style={{ textAlign: 'center' }}>
+								简体中文
+							</option>
+							<option value={'zh_hant'} style={{ textAlign: 'center' }}>
+								正體中文
+							</option>
+							<option value={'he'} style={{ textAlign: 'center' }}>
+								עברית
+							</option>
+						</NativeSelect>
 						<Tooltip
 							title={theme.palette.mode === 'dark' ? 'Light Mode' : 'Dark Mode'}
 						>

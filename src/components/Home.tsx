@@ -1,17 +1,29 @@
 import * as React from 'react';
 import { Box, Button, ButtonGroup, Grid, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
+import {
+	useTransition,
+	useSpring,
+	useChain,
+	config,
+	animated,
+	useSpringRef,
+} from '@react-spring/web';
 import { Parallax, ParallaxLayer, IParallax } from '@react-spring/parallax';
 import Footer from './Footer';
-import home from '../assets/bg-home.mp4';
+import home from '../assets/video/bg-home.mp4';
+import foods from '../assets/video/bg-foods.mp4';
+import team from '../assets/video/bg-team.mp4';
 
 export default function Home({ theme }) {
-	const [loopNum, setLoopNum] = React.useState(0);
-	const [isDeleting, setIsDeleting] = React.useState(false);
-	const [text, setText] = React.useState('');
-	const [delta, setDelta] = React.useState(300 - Math.random() * 100);
+	const { t } = useTranslation();
+	const [loopNum, setLoopNum] = React.useState<number>(0);
+	const [isDeleting, setIsDeleting] = React.useState<boolean>(false);
+	const [text, setText] = React.useState<string>('');
+	const [delta, setDelta] = React.useState<number>(300 - Math.random() * 100);
 
 	const parallax = React.useRef<IParallax>(null!);
-	const period = 2000;
+	const period: number = 2000;
 	const toRotate = ['Zeleze', '助一助', 'Zlaze', '互幫互助', 'זה לזה', '𗡨𗡨'];
 
 	React.useEffect(() => {
@@ -44,45 +56,45 @@ export default function Home({ theme }) {
 	return (
 		<Parallax ref={parallax} pages={3}>
 			{/*backgrounds*/}
-			<ParallaxLayer
-				offset={1}
-				speed={1}
-				style={{ backgroundColor: '#805E73' }}
-			/>
-			<ParallaxLayer
-				offset={2}
-				speed={1}
-				style={{ backgroundColor: '#87BCDE' }}
-			/>
-
+			<ParallaxLayer offset={1} speed={1} factor={2}>
+				{' '}
+				<video
+					autoPlay
+					loop
+					muted
+					playsInline
+					style={{ filter: 'blur(2px)' }}
+					src={foods}
+				/>
+			</ParallaxLayer>
+			<ParallaxLayer offset={2} speed={1} style={{ objectFit: 'cover' }}>
+				{' '}
+				<video
+					autoPlay
+					loop
+					muted
+					playsInline
+					style={{ filter: 'blur(2px)' }}
+					src={team}
+				/>
+			</ParallaxLayer>
 			<ParallaxLayer
 				offset={0}
 				speed={1}
-				factor={1}
-				style={{
-					backgroundColor: '#87BCDE',
-					fill: 'blur(10px)',
-					zIndex: 0,
-				}}
+				factor={2}
 				onClick={() => parallax.current.scrollTo(1)}
 			>
-				<video autoPlay loop muted playsInline style={{ filter: 'blur(2px)' }}>
-					<source src={home} type='video/mp4' />
-				</video>
+				<video
+					autoPlay
+					loop
+					muted
+					playsInline
+					style={{ filter: 'blur(2px)' }}
+					src={home}
+				/>
 			</ParallaxLayer>
 
 			{/*contents*/}
-			<ParallaxLayer
-				offset={2}
-				speed={-0.3}
-				style={{
-					backgroundSize: '80%',
-					backgroundPosition: 'center',
-					border: '1px solid black',
-				}}
-			>
-				<div>This is the 3rd layer</div>
-			</ParallaxLayer>
 
 			<ParallaxLayer
 				offset={0}
@@ -109,23 +121,10 @@ export default function Home({ theme }) {
 					<Grid container spacing={4} width='75%'>
 						<Grid item xs={12} md={8} textAlign='left'>
 							<Typography variant='h2' fontFamily='Markazi Text'>
-								Welcome to {text}
+								{t('t-welcome-to') + text}
 							</Typography>
 							<Typography paragraph fontFamily='Karla' my={4}>
-								Welcome to Zeleze, your go-to platform for customized mutual
-								help services. Zeleze addresses this challenge by providing a
-								platform that accurately defines and communicates the real-time
-								needs of individuals and groups. We connect those in need with
-								individuals and communities willing to offer assistance,
-								ensuring aid is targeted and avoiding duplication. Whether
-								you're looking to support your local community or extend a
-								helping hand internationally, Zeleze is your hub for creating
-								and fulfilling meaningful needs. You can easily create your own
-								need page, specifying whether you require objects or services,
-								and share it with your network. Join Zeleze, be part of a
-								international network of solidarity, and contribute to building
-								a global community where assistance is personalized, impactful,
-								and efficiently delivered.
+								{t('p-intro')}
 							</Typography>
 							<ButtonGroup>
 								<Button
@@ -134,7 +133,7 @@ export default function Home({ theme }) {
 									color='inherit'
 									href='/signup'
 								>
-									Sign up
+									{t('t-signup')}
 								</Button>
 								<Button
 									variant='outlined'
@@ -142,7 +141,7 @@ export default function Home({ theme }) {
 									color='inherit'
 									href='/login'
 								>
-									Log in
+									{t('t-login')}
 								</Button>
 							</ButtonGroup>
 						</Grid>

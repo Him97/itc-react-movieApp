@@ -26,3 +26,13 @@ video {
   height: 100%;
   object-fit: cover;
 }
+
+@font-face {
+  font-family: "HYWenhei";
+  src: local("HYWenHei-55S"),url("./assets/fonts/HYWenHei-55S.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Tangut";
+  src: local("Tangut"),url("./assets/fonts/Tangut.ttf") format("truetype");
+}
