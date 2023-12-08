@@ -1,35 +1,47 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import * as React from 'react';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { grey } from '@mui/material/colors';
+import Navbar from './components/Navbar';
+import Router from './utils/Router';
+const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+	const [mode, setMode] = React.useState<'light' | 'dark'>('light');
+	const colorMode = React.useMemo(
+		() => ({
+			toggleColorMode: () => {
+				setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+			},
+		}),
+		[]
+	);
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+	const theme = React.useMemo(
+		() =>
+			createTheme({
+				typography: {
+					fontFamily: ['Karla', 'sans-serif', 'Markazi Text', 'serif'].join(
+						','
+					),
+				},
+				palette: {
+					primary: {
+						light: grey[50],
+						dark: grey[900],
+						main: grey[500],
+					},
+					mode,
+				},
+			}),
+		[mode]
+	);
+
+	return (
+		<ColorModeContext.Provider value={colorMode}>
+			<ThemeProvider theme={theme}>
+				<Navbar colorMode={colorMode} />
+				<Router theme={theme} />
+			</ThemeProvider>
+		</ColorModeContext.Provider>
+	);
 }
-
-export default App
