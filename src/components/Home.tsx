@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Box, Button, ButtonGroup, Grid, Typography } from '@mui/material';
+import { ThemeContext } from '@emotion/react';
 import { useTranslation } from 'react-i18next';
 import {
 	useTransition,
@@ -15,8 +16,9 @@ import home from '../assets/video/bg-home.mp4';
 import foods from '../assets/video/bg-foods.mp4';
 import team from '../assets/video/bg-team.mp4';
 
-export default function Home({ theme }) {
+export default function Home() {
 	const { t } = useTranslation();
+	const theme = React.useContext(ThemeContext);
 	const [loopNum, setLoopNum] = React.useState<number>(0);
 	const [isDeleting, setIsDeleting] = React.useState<boolean>(false);
 	const [text, setText] = React.useState<string>('');
@@ -57,8 +59,8 @@ export default function Home({ theme }) {
 		<Parallax ref={parallax} pages={3}>
 			{/*backgrounds*/}
 			<ParallaxLayer offset={1} speed={1} factor={2}>
-				{' '}
-				<video
+				<Box
+					component='video'
 					autoPlay
 					loop
 					muted
@@ -67,9 +69,9 @@ export default function Home({ theme }) {
 					src={foods}
 				/>
 			</ParallaxLayer>
-			<ParallaxLayer offset={2} speed={1} style={{ objectFit: 'cover' }}>
-				{' '}
-				<video
+			<ParallaxLayer offset={2} speed={1}>
+				<Box
+					component='video'
 					autoPlay
 					loop
 					muted
@@ -84,7 +86,8 @@ export default function Home({ theme }) {
 				factor={2}
 				onClick={() => parallax.current.scrollTo(1)}
 			>
-				<video
+				<Box
+					component='video'
 					autoPlay
 					loop
 					muted
@@ -95,7 +98,6 @@ export default function Home({ theme }) {
 			</ParallaxLayer>
 
 			{/*contents*/}
-
 			<ParallaxLayer
 				offset={0}
 				speed={0.1}
@@ -120,7 +122,7 @@ export default function Home({ theme }) {
 				>
 					<Grid container spacing={4} width='75%'>
 						<Grid item xs={12} md={8} textAlign='left'>
-							<Typography variant='h2' fontFamily='Markazi Text'>
+							<Typography component='h1' variant='h2'>
 								{t('t-welcome-to') + text}
 							</Typography>
 							<Typography paragraph fontFamily='Karla' my={4}>

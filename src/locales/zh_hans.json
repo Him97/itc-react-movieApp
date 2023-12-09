@@ -1,8 +1,15 @@
 {
 	"t-zeleze": "Zeleze",
 	"t-welcome-to": "欢迎来到",
-	"p-intro": "Welcome to Zeleze, your go-to platform for customized mutual help services. Zeleze addresses this challenge by providing a platform that accurately defines and communicates the real-time needs of individuals and groups. We connect those in need with individuals and communities willing to offer assistance ensuring aid is targeted and avoiding duplication. Whether you're looking to support your local community or extend a helping hand internationally, Zeleze is your hub for creating and fulfilling meaningful needs. You can easily create your own need page, specifying whether you require objects or services, and share it with your network. Join Zeleze, be part of a international network of solidarity, and contribute to building a global community where assistance is personalized, impactful, and efficiently delivered.",
+	"p-intro": "欢迎来到Zeleze定制互助服务平台。Zeleze 通过提供一个准确定义和传达个人和团体实时需求的平台来应对这一挑战。我们将有需要的人与愿意提供援助的个人和社区联系起来，确保援助有针对性并避免重复。无论您是想支持当地社区还是向国际伸出援助之手，Zeleze都是您创造和满足有意义需求的中心。您可以轻松创建自己的需求页面，指定您是否需要对象或服务，并将其与您的网络共享。加入 Zeleze，成为国际团结网络的一部分，并为建立一个提供个性化、有影响力和高效援助的全球社区做出贡献。",
 	"t-signup": "注册",
 	"t-login": "登陆",
-	"t-select-lang": "选择语言"
+	"t-select-lang": "选择语言",
+	"t-copyright": "版权所有",
+	"t-email": "电子邮件",
+	"t-password": "密码",
+	"t-firstname": "名字",
+	"t-lastname": "姓氏",
+	"t-phone": "手机号码",
+	"t-confirm-password": "确认密码"
 }

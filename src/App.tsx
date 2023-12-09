@@ -22,15 +22,23 @@ export default function App() {
 		() =>
 			createTheme({
 				typography: {
+					h2: {
+						fontFamily: [
+							'Markazi Text',
+							'serif',
+							'HYWenhei',
+							'Tangut',
+							'IBM Plex Sans Hebrew',
+						].join(','),
+					},
 					fontFamily: [
 						'Karla',
 						'sans-serif',
 						'Markazi Text',
 						'serif',
 						'HYWenhei',
-						'serif',
 						'Tangut',
-						'sans-serif',
+						'IBM Plex Sans Hebrew',
 					].join(','),
 				},
 				palette: {
@@ -49,7 +57,7 @@ export default function App() {
 		<ColorModeContext.Provider value={colorMode}>
 			<ThemeProvider theme={theme}>
 				<Navbar colorMode={colorMode} />
-				<Router theme={theme} />
+				<Router />
 			</ThemeProvider>
 		</ColorModeContext.Provider>
 	);

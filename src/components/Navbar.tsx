@@ -173,27 +173,17 @@ export default function Navbar({ colorMode }) {
 						<NativeSelect
 							defaultValue='Select Language'
 							inputProps={{
-								name: 'adoption_status',
-								id: 'adoption_status',
+								name: 'language',
+								id: 'language',
 							}}
 							onChange={chooseLanguage}
-							color='success'
+							color='primary'
 						>
-							<option disabled style={{ textAlign: 'center' }}>
-								{t('t-select-lang')}
-							</option>
-							<option value={'en'} style={{ textAlign: 'center' }}>
-								English
-							</option>
-							<option value={'zh_hans'} style={{ textAlign: 'center' }}>
-								简体中文
-							</option>
-							<option value={'zh_hant'} style={{ textAlign: 'center' }}>
-								正體中文
-							</option>
-							<option value={'he'} style={{ textAlign: 'center' }}>
-								עברית
-							</option>
+							<option disabled>{t('t-select-lang')}</option>
+							<option value={'en'}>English</option>
+							<option value={'zh_hans'}>简体中文</option>
+							<option value={'zh_hant'}>正體中文</option>
+							<option value={'he'}>עברית</option>
 						</NativeSelect>
 						<Tooltip
 							title={theme.palette.mode === 'dark' ? 'Light Mode' : 'Dark Mode'}

@@ -1,7 +1,12 @@
+import * as React from 'react';
 import { Box, Link, Typography } from '@mui/material';
+import { ThemeContext } from '@emotion/react';
 import { useTranslation } from 'react-i18next';
 
-export default function Footer({ theme }) {
+export default function Footer() {
+	const { t } = useTranslation();
+	const theme = React.useContext<object>(ThemeContext);
+
 	return (
 		<Box
 			component='footer'
@@ -13,16 +18,17 @@ export default function Footer({ theme }) {
 					? 'rgba(0, 0, 0, 0.7)'
 					: 'rgba(255, 255, 255, 0.7)'
 			}
-			sx={{
-				py: 3,
-				px: 2,
-				mt: 'auto',
-			}}
+			mt='auto'
+			py={3}
+			px={2}
+			position='fixed'
+			bottom='0'
 		>
 			<Typography color='text.secondary' maxWidth='sm'>
-				{'Copyright © '}
+				{t('t-copyright')}
+				{' © '}
 				<Link color='inherit' href='/'>
-					Zeleze
+					{t('t-zeleze')}
 				</Link>{' '}
 				{new Date().getFullYear()}
 				{'.'}
