@@ -32,22 +32,19 @@ export default function Auth() {
 		config: { mass: 5, tension: 350, friction: 40 },
 	}));
 
-	const [{ wheelY }, wheelApi] = useSpring(() => ({ wheelY: 0 }));
-
 	useGesture(
 		{
 			onDrag: ({ active, offset: [x, y] }) =>
 				api({ x, y, scale: active ? 1 : 1.1 }),
-			onPinch: ({ offset: [d, a] }) => api({ zoom: d / 200 }),
+			onPinch: ({ offset: [d] }) => api({ zoom: d / 200 }),
 			onMove: ({ dragging }) =>
 				!dragging &&
 				api({
 					scale: 1.05,
 				}),
 			onHover: ({ hovering }) => !hovering && api({ scale: 1 }),
-			onWheel: ({ event, offset: [, y] }) => {
+			onWheel: ({ event }) => {
 				event.preventDefault();
-				wheelApi.set({ wheelY: y });
 			},
 		},
 		{ target, eventOptions: { passive: false } }

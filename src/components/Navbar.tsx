@@ -31,10 +31,10 @@ export default function Navbar({ colorMode }) {
 	);
 	const [language, setLanguage] = React.useState<string>('en');
 
-	const chooseLanguage = (e) => {
-		e.preventDefault();
-		i18n.changeLanguage(e.target.value);
-		setLanguage(e.target.value);
+	const chooseLanguage = (event) => {
+		event.preventDefault();
+		i18n.changeLanguage(event.target.value);
+		setLanguage(event.target.value);
 	};
 
 	const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -127,9 +127,7 @@ export default function Navbar({ colorMode }) {
 					</Box>
 					<HandshakeIcon
 						sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }}
-						color={
-							theme.palette.mode === 'dark' ? 'primary.light' : 'primary.dark'
-						}
+						color={theme.palette.mode === 'dark' ? 'primary' : 'primary'}
 					/>
 					<Typography
 						variant='h5'

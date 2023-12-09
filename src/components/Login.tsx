@@ -20,7 +20,7 @@ import { POST } from '../utils/api';
 export default function Login() {
 	const { t } = useTranslation();
 	const navigate = useNavigate();
-	const theme = React.useContext<object>(ThemeContext);
+	const theme = React.useContext(ThemeContext);
 	const [email, setEmail] = React.useState<string>('');
 	const [password, setPassword] = React.useState<string>('');
 
