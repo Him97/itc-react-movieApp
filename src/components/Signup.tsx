@@ -5,6 +5,7 @@ import {
 	Button,
 	Grid,
 	Link,
+	NativeSelect,
 	TextField,
 	Typography,
 } from '@mui/material';
@@ -13,7 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import pic from '../assets/images/goods2.jpg';
-import { POST } from '../utils/api';
+import { GET, POST } from '../utils/api';
 
 export default function Signup() {
 	const { t } = useTranslation();
@@ -25,8 +26,22 @@ export default function Signup() {
 	const [phone, setPhone] = React.useState<string>('');
 	const [password, setPassword] = React.useState<string>('');
 	const [confirmPassword, setConfirmPassword] = React.useState<string>('');
+	const [countries, setCountries] = React.useState<object>([]);
 	const [country, setCountry] = React.useState<string>('');
 	const [region, setRegion] = React.useState<string>('');
+
+	React.useEffect(() => {
+		const getCountry = async () => {
+			const data = await GET(
+				'https://countriesnow.space/api/v0.1/countries/positions'
+			);
+			if (data) {
+				console.log(data.json());
+				return data;
+			}
+		};
+		getCountry();
+	}, []);
 
 	const handleSignup = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -67,6 +82,7 @@ export default function Signup() {
 				sm={6}
 				md={6}
 				lg={6}
+				borderRadius={1}
 				sx={{
 					backgroundImage: `url(${pic})`,
 					backgroundSize: 'auto 100%',
@@ -79,6 +95,7 @@ export default function Signup() {
 					flexDirection='column'
 					justifyContent='center'
 					bgcolor='rgba(0,0,0,0.5)'
+					borderRadius={1}
 				>
 					<Link href='/login' color='primary.light' underline='none'>
 						Already registered? Log in to your account now!
@@ -108,7 +125,6 @@ export default function Signup() {
 						autoComplete='given-name'
 						name='firstname'
 						required
-						fullWidth
 						id='firstname'
 						label={t('t-firstname')}
 						autoFocus
@@ -118,7 +134,6 @@ export default function Signup() {
 					<TextField
 						margin='normal'
 						required
-						fullWidth
 						id='lastname'
 						label={t('t-lastname')}
 						name='lastname'
@@ -158,6 +173,14 @@ export default function Signup() {
 						onChange={(e) => setPhone(e.target.value)}
 						value={phone}
 					/>
+					<NativeSelect>
+						<option value='0'>{t('t-country')}</option>
+						{countries.map((item: any) => (
+							<option key={item.id} value={item.id}>
+								{item.name}
+							</option>
+						))}
+					</NativeSelect>
 					<TextField
 						margin='normal'
 						required

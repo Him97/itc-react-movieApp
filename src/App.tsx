@@ -5,10 +5,14 @@ import './assets/fonts/HYWenHei-55S.ttf';
 import './assets/fonts/Tangut.ttf';
 import Navbar from './components/Navbar';
 import Router from './utils/Router';
-const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
+import { ColorModeContext } from './contexts/ColorMode';
+import { LocaleProvider } from './contexts/Locale';
 
 export default function App() {
-	const [mode, setMode] = React.useState<'light' | 'dark'>('light');
+	type ModeType = 'light' | 'dark';
+	type LanguageType = 'en' | 'he' | 'zh_hans' | 'zh_hant';
+	const [mode, setMode] = React.useState<ModeType>('light');
+	const [language, setLanguage] = React.useState<LanguageType>('en');
 	const colorMode = React.useMemo(
 		() => ({
 			toggleColorMode: () => {
@@ -49,15 +53,18 @@ export default function App() {
 					},
 					mode,
 				},
+				direction: language === 'he' ? 'rtl' : 'ltr',
 			}),
-		[mode]
+		[mode, language]
 	);
 
 	return (
 		<ColorModeContext.Provider value={colorMode}>
 			<ThemeProvider theme={theme}>
-				<Navbar colorMode={colorMode} />
-				<Router />
+				<LocaleProvider>
+					<Navbar colorMode={colorMode} />
+					<Router />
+				</LocaleProvider>
 			</ThemeProvider>
 		</ColorModeContext.Provider>
 	);

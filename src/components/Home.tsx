@@ -26,7 +26,16 @@ export default function Home() {
 
 	const parallax = React.useRef<IParallax>(null!);
 	const period: number = 2000;
-	const toRotate = ['Zeleze', '助一助', 'Zlaze', '互幫互助', 'זה לזה', '𗡨𗡨'];
+	const toRotate = [
+		'Zelaze',
+		'助一助',
+		'لبعضنا البعض',
+		'Zlaze',
+		'互幫互助',
+		'זה לזה',
+		'𗡨𗡨',
+		'そうごふじょ',
+	];
 
 	React.useEffect(() => {
 		const ticker = setInterval(() => {

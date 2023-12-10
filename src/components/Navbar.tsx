@@ -18,6 +18,8 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { useTheme } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';
+import { useLocale } from '../contexts/Locale';
+import { LanguageType } from '../contexts/Locale';
 import i18n from '../utils/i18n';
 
 const pages = ['Home', 'Services', 'About'];
@@ -25,16 +27,16 @@ const pages = ['Home', 'Services', 'About'];
 export default function Navbar({ colorMode }) {
 	const { t } = useTranslation();
 	const theme = useTheme();
-
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
 		null
 	);
-	const [language, setLanguage] = React.useState<string>('en');
+	const { language, setLanguage } = useLocale();
 
-	const chooseLanguage = (event) => {
+	const chooseLanguage = (event: React.ChangeEvent<HTMLSelectElement>) => {
 		event.preventDefault();
+		const selectedLanguage = event.target.value as LanguageType;
 		i18n.changeLanguage(event.target.value);
-		setLanguage(event.target.value);
+		setLanguage(selectedLanguage);
 	};
 
 	const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -69,19 +71,19 @@ export default function Navbar({ colorMode }) {
 						color={
 							theme.palette.mode === 'dark' ? 'primary.light' : 'primary.dark'
 						}
+						display={{ xs: 'none', md: 'flex' }}
+						fontFamily='monospace'
+						fontWeight={700}
+						letterSpacing='.3rem'
+						mr={2}
 						sx={{
-							mr: 2,
-							display: { xs: 'none', md: 'flex' },
-							fontFamily: 'monospace',
-							fontWeight: 700,
-							letterSpacing: '.3rem',
 							textDecoration: 'none',
 						}}
 					>
-						{t('zeleze')}
+						{t('t-zelaze')}
 					</Typography>
 
-					<Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+					<Box display={{ xs: 'flex', md: 'none' }} flexGrow={1}>
 						<IconButton
 							size='large'
 							aria-label='account of current user'
@@ -137,25 +139,27 @@ export default function Navbar({ colorMode }) {
 						color={
 							theme.palette.mode === 'dark' ? 'primary.light' : 'primary.dark'
 						}
+						mr={2}
+						display={{ xs: 'flex', md: 'none' }}
+						flexGrow={1}
+						fontFamily='monospace'
+						fontWeight={700}
+						letterSpacing='.3rem'
 						sx={{
-							mr: 2,
-							display: { xs: 'flex', md: 'none' },
-							flexGrow: 1,
-							fontFamily: 'monospace',
-							fontWeight: 700,
-							letterSpacing: '.3rem',
 							textDecoration: 'none',
 						}}
 					>
-						{t('zeleze')}
+						{t('Zelaze')}
 					</Typography>
-					<Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+					<Box flexGrow={1} display={{ xs: 'none', md: 'flex' }}>
 						{pages.map((page) => (
 							<Link
 								key={page}
 								variant='button'
 								onClick={handleCloseNavMenu}
-								sx={{ m: 2, display: 'block', textDecoration: 'none' }}
+								m={2}
+								display='block'
+								sx={{ textDecoration: 'none' }}
 								color={
 									theme.palette.mode === 'dark'
 										? 'primary.light'
@@ -167,9 +171,12 @@ export default function Navbar({ colorMode }) {
 						))}
 					</Box>
 
-					<Box sx={{ flexGrow: 0 }}>
+					<Box flexGrow={0}>
 						<NativeSelect
 							defaultValue='Select Language'
+							title='language'
+							aria-labelledby='language'
+							aria-label='language'
 							inputProps={{
 								name: 'language',
 								id: 'language',

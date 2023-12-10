@@ -28,7 +28,7 @@ export default function Footer() {
 				{t('t-copyright')}
 				{' © '}
 				<Link color='inherit' href='/'>
-					{t('t-zeleze')}
+					{t('t-zelaze')}
 				</Link>{' '}
 				{new Date().getFullYear()}
 				{'.'}

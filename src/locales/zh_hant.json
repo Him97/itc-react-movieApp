@@ -1,6 +1,16 @@
 {
-	"t-welcome-to": "Welcome to ",
-	"p-intro": "Welcome to Zeleze, your go-to platform for customized mutual help services. Zeleze addresses this challenge by providing a platform that accurately defines and communicates the real-time needs of individuals and groups. We connect those in need with individuals and communities willing to offer assistance ensuring aid is targeted and avoiding duplication. Whether you're looking to support your local community or extend a helping hand internationally, Zeleze is your hub for creating and fulfilling meaningful needs. You can easily create your own need page, specifying whether you require objects or services, and share it with your network. Join Zeleze, be part of a international network of solidarity, and contribute to building a global community where assistance is personalized, impactful, and efficiently delivered.",
-	"t-signup": "Sign Up",
-	"t-login": "Log In"
+	"t-zelaze": "互幫互助",
+	"t-welcome-to": "歡迎光臨",
+	"p-intro": "歡迎光臨「互幫互助」訂製互助服務平臺。「互幫互助」可以準確定義並傳達個人及團體的即時需求，從而高效地匹配供需雙方，確保援助的有效與效率。我們需要幫助的用戶與願意伸出援手的個人和社區聯繫起來，確保援助有針對性、避免重複。無論您是想支持在地社區抑或是向國際社會予以援手，「互幫互助」都將會是符合您需求的首選。您可以輕鬆創建自己的供需頁面，自定義對象或服務、與您的社交網路分享。加入 「互幫互助」國際社團，成爲其中一員，相互幫助、相互扶持、爲一個團結和平的世界做出您的貢獻。",
+	"t-signup": "註冊",
+	"t-login": "登入",
+	"t-select-lang": "選擇語言",
+	"t-copyright": "版權所有",
+	"t-email": "電郵地址",
+	"t-invalid-email": "電郵地址格式不規範",
+	"t-password": "密碼",
+	"t-firstname": "名字",
+	"t-lastname": "姓氏",
+	"t-phone": "電話號碼",
+	"t-confirm-password": "確認密碼"
 }

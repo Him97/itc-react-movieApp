@@ -22,7 +22,7 @@ const getHeaders = (): AxiosRequestConfig => {
 export const GET = async (url: string, params = {}): Promise<any> => {
   try {
     const resp = await api.get(url, { ...getHeaders(), params });
-    return resp.data;
+    return resp;
   } catch (error) {
     handleError(error);
   }

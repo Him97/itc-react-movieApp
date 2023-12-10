@@ -27,6 +27,10 @@ video {
   object-fit: cover;
 }
 
+option{
+  text-align: center;
+}
+
 @font-face {
   font-family: "HYWenhei";
   src: local("HYWenHei-55S"),url("./assets/fonts/HYWenHei-55S.ttf") format("truetype");

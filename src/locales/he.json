@@ -1,6 +1,16 @@
 {
-	"t-welcome-to": "Welcome to ",
-	"p-intro": "Welcome to Zeleze, your go-to platform for customized mutual help services. Zeleze addresses this challenge by providing a platform that accurately defines and communicates the real-time needs of individuals and groups. We connect those in need with individuals and communities willing to offer assistance ensuring aid is targeted and avoiding duplication. Whether you're looking to support your local community or extend a helping hand internationally, Zeleze is your hub for creating and fulfilling meaningful needs. You can easily create your own need page, specifying whether you require objects or services, and share it with your network. Join Zeleze, be part of a international network of solidarity, and contribute to building a global community where assistance is personalized, impactful, and efficiently delivered.",
-	"t-signup": "Sign Up",
-	"t-login": "Log In"
+	"t-zelaze": "זה לזה",
+	"t-welcome-to": "ברוכים הבאים ל",
+	"p-intro": "ברוכים הבאים לזה לזה, פלטפורמת הבחירה שלך לשירותי עזרה הדדית מותאמים אישית. זה לזה מתמודד עם אתגר זה על ידי מתן פלטפורמה המגדירה ומתקשרת במדויק את הצרכים בזמן אמת של יחידים וקבוצות. אנו מחברים את הנזקקים לאנשים וקהילות המוכנים להציע סיוע כדי להבטיח שהסיוע יהיה ממוקד ומניעת כפילות. בין אם אתה מחפש לתמוך בקהילה המקומית שלך או להושיט יד מסייעת בינלאומית, זה לזה הוא המרכז שלך ליצירה ולמילוי צרכים משמעותיים. אתה יכול בקלות ליצור דף צורך משלך, לציין אם אתה זקוק לאובייקטים או שירותים, ולשתף אותו עם הרשת שלך. הצטרף לזה לזה, היה חלק מרשת בינלאומית של סולידריות, ותרום לבניית קהילה גלובלית שבה הסיוע מותאם אישית, משפיע ומועבר ביעילות.",
+	"t-signup": "הרשמה",
+	"t-login": "התחבר",
+	"t-select-lang": "Select Language",
+	"t-copyright": "Copyright",
+	"t-email": "כתובת מייל",
+	"t-invalid-email": "כתובת מייל לא תקינה",
+	"t-password": "סיסמה",
+	"t-firstname": "שם פרטי",
+	"t-lastname": "שם משפחה",
+	"t-phone": "מספר טלפון",
+	"t-confirm-password": "אשר סיסמה"
 }
