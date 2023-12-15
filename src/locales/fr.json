@@ -1,6 +1,6 @@
 {
 	"t-zelaze": "Zelaze",
-	"t-welcome-to": "Welcome to ",
+	"t-welcome-to": "Bienvenue sur ",
 	"p-intro": "Welcome to Zelaze, your go-to platform for customized mutual help services. Zelaze addresses this challenge by providing a platform that accurately defines and communicates the real-time needs of individuals and groups. We connect those in need with individuals and communities willing to offer assistance ensuring aid is targeted and avoiding duplication. Whether you're looking to support your local community or extend a helping hand internationally, Zelaze is your hub for creating and fulfilling meaningful needs. You can easily create your own need page, specifying whether you require objects or services, and share it with your network. Join Zelaze, be part of a international network of solidarity, and contribute to building a global community where assistance is personalized, impactful, and efficiently delivered.",
 	"t-signup": "Sign Up",
 	"t-login": "Log In",
@@ -8,11 +8,9 @@
 	"t-copyright": "Copyright",
 	"t-email": "Email Address",
 	"t-invalid-email": "Invalid Email",
-	"t-password": "Password",
+	"t-password": "Mot de passe",
 	"t-firstname": "First Name",
 	"t-lastname": "Last Name",
 	"t-phone": "Phone Number",
-	"t-confirm-password": "Confirm Password",
-	"t-country": "Country",
-	"t-region": "Region"
+	"t-confirm-password": "Confirm Password"
 }

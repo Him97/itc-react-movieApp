@@ -1,15 +1,7 @@
 import * as React from 'react';
 import { Box, Button, ButtonGroup, Grid, Typography } from '@mui/material';
-import { ThemeContext } from '@emotion/react';
+import { ThemeContext, Theme } from '@emotion/react';
 import { useTranslation } from 'react-i18next';
-import {
-	useTransition,
-	useSpring,
-	useChain,
-	config,
-	animated,
-	useSpringRef,
-} from '@react-spring/web';
 import { Parallax, ParallaxLayer, IParallax } from '@react-spring/parallax';
 import Footer from './Footer';
 import home from '../assets/video/bg-home.mp4';
@@ -18,7 +10,7 @@ import team from '../assets/video/bg-team.mp4';
 
 export default function Home() {
 	const { t } = useTranslation();
-	const theme = React.useContext(ThemeContext);
+	const theme = React.useContext<Theme>(ThemeContext);
 	const [loopNum, setLoopNum] = React.useState<number>(0);
 	const [isDeleting, setIsDeleting] = React.useState<boolean>(false);
 	const [text, setText] = React.useState<string>('');
@@ -34,6 +26,7 @@ export default function Home() {
 		'互幫互助',
 		'זה לזה',
 		'𗡨𗡨',
+		'Usaidizi Kwa Wote',
 		'そうごふじょ',
 	];
 
@@ -189,7 +182,7 @@ export default function Home() {
 				}}
 				onClick={() => parallax.current.scrollTo(0)}
 			>
-				<Footer theme={theme} />
+				<Footer />
 			</ParallaxLayer>
 		</Parallax>
 	);

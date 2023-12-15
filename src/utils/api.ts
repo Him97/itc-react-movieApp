@@ -19,7 +19,7 @@ const getHeaders = (): AxiosRequestConfig => {
   };
 };
 
-export const GET = async (url: string, params = {}): Promise<any> => {
+export const GET = async (url: string, params = {}): Promise<unknown> => {
   try {
     const resp = await api.get(url, { ...getHeaders(), params });
     return resp;
@@ -28,7 +28,7 @@ export const GET = async (url: string, params = {}): Promise<any> => {
   }
 };
 
-export const POST = async (url: string, body: any): Promise<any> => {
+export const POST = async (url: string, body: object): Promise<unknown> => {
   if (url === '/login') {
     try {
       const resp = await api.post(url, body, { withCredentials: true }, getHeaders());

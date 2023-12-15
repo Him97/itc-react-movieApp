@@ -1,4 +1,5 @@
 import * as React from 'react';
+import axios from 'axios';
 import {
 	Avatar,
 	Box,
@@ -14,9 +15,13 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import pic from '../assets/images/goods2.jpg';
-import { GET, POST } from '../utils/api';
 
 export default function Signup() {
+	interface Country {
+		name: string;
+		iso2: string;
+	}
+
 	const { t } = useTranslation();
 	const navigate = useNavigate();
 	const theme = React.useContext<object>(ThemeContext);
@@ -28,20 +33,47 @@ export default function Signup() {
 	const [confirmPassword, setConfirmPassword] = React.useState<string>('');
 	const [countries, setCountries] = React.useState<object>([]);
 	const [country, setCountry] = React.useState<string>('');
+	const [regions, setRegions] = React.useState<object>([]);
 	const [region, setRegion] = React.useState<string>('');
 
 	React.useEffect(() => {
-		const getCountry = async () => {
-			const data = await GET(
-				'https://countriesnow.space/api/v0.1/countries/positions'
-			);
-			if (data) {
-				console.log(data.json());
-				return data;
+		const getCountries = async () => {
+			try {
+				const response = await axios.get(
+					'https://countriesnow.space/api/v0.1/countries/positions'
+				);
+				const data = await response.data;
+				if (data.error === false) {
+					setCountries(data.data);
+				}
+			} catch (error) {
+				console.log(error);
 			}
 		};
-		getCountry();
+		getCountries();
 	}, []);
+
+	React.useEffect(() => {
+		const getRegions = async () => {
+			const body = {
+				country: country,
+			};
+			try {
+				const response = await axios.post(
+					`https://countriesnow.space/api/v0.1/countries/cities`,
+					body
+				);
+				const data = await response.data;
+				console.log(data);
+				if (data.error === false) {
+					setRegions(data.data);
+				}
+			} catch (error) {
+				console.log(error);
+			}
+		};
+		getRegions();
+	}, [country]);
 
 	const handleSignup = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -50,9 +82,11 @@ export default function Signup() {
 			lastname,
 			email,
 			phone,
+			country,
+			region,
 			password,
 		};
-		const data = await POST('/signup', body);
+		const data = await axios.post('/register', body);
 		if (data) {
 			setTimeout(async () => {
 				navigate('/login');
@@ -96,6 +130,10 @@ export default function Signup() {
 					justifyContent='center'
 					bgcolor='rgba(0,0,0,0.5)'
 					borderRadius={1}
+					sx={{
+						':hover': { bgcolor: 'rgba(0,0,0,0.7)' },
+						transitionDuration: '1s',
+					}}
 				>
 					<Link href='/login' color='primary.light' underline='none'>
 						Already registered? Log in to your account now!
@@ -128,7 +166,7 @@ export default function Signup() {
 						id='firstname'
 						label={t('t-firstname')}
 						autoFocus
-						onChange={(e) => setFirstname(e.target.value)}
+						onChange={(event) => setFirstname(event.target.value)}
 						value={firstname}
 					/>
 					<TextField
@@ -138,7 +176,7 @@ export default function Signup() {
 						label={t('t-lastname')}
 						name='lastname'
 						autoComplete='family-name'
-						onChange={(e) => setLastname(e.target.value)}
+						onChange={(event) => setLastname(event.target.value)}
 						value={lastname}
 					/>
 					<TextField
@@ -149,7 +187,7 @@ export default function Signup() {
 						label={t('t-email')}
 						name='email'
 						autoComplete='email'
-						onChange={(e) => setEmail(e.target.value)}
+						onChange={(event) => setEmail(event.target.value)}
 						value={email}
 						error={
 							email !== '' &&
@@ -170,14 +208,28 @@ export default function Signup() {
 						type='text'
 						id='phone'
 						autoComplete='phone-number'
-						onChange={(e) => setPhone(e.target.value)}
+						onChange={(event) => setPhone(event.target.value)}
 						value={phone}
 					/>
-					<NativeSelect>
-						<option value='0'>{t('t-country')}</option>
-						{countries.map((item: any) => (
-							<option key={item.id} value={item.id}>
+					<NativeSelect
+						onChange={(event) => setCountry(event.target.value)}
+						placeholder={t('t-country')}
+					>
+						<option disabled>{t('t-country')}</option>
+						{countries.map((item: Country) => (
+							<option key={item.iso2} value={item.name}>
 								{item.name}
+							</option>
+						))}
+					</NativeSelect>
+					<NativeSelect
+						onChange={(event) => setRegion(event.target.value)}
+						placeholder={t('t-region')}
+					>
+						<option disabled>{t('t-region')}</option>
+						{regions.map((item: string) => (
+							<option key={item} value={item}>
+								{item}
 							</option>
 						))}
 					</NativeSelect>
@@ -190,7 +242,7 @@ export default function Signup() {
 						type='password'
 						id='password'
 						autoComplete='new-password'
-						onChange={(e) => setPassword(e.target.value)}
+						onChange={(event) => setPassword(event.target.value)}
 						value={password}
 					/>
 					<TextField
@@ -202,7 +254,7 @@ export default function Signup() {
 						type='password'
 						id='confirmPassword'
 						value={confirmPassword}
-						onChange={(e) => setConfirmPassword(e.target.value)}
+						onChange={(event) => setConfirmPassword(event.target.value)}
 						error={password !== confirmPassword}
 						helperText={
 							password !== confirmPassword ? t('t-password-not-match') : null

@@ -2,6 +2,7 @@ import * as React from 'react';
 import {
 	AppBar,
 	Box,
+	Button,
 	Container,
 	IconButton,
 	Link,
@@ -13,9 +14,11 @@ import {
 	Typography,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import SearchIcon from '@mui/icons-material/Search';
 import HandshakeIcon from '@mui/icons-material/Handshake';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
+import TranslateIcon from '@mui/icons-material/Translate';
 import { useTheme } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';
 import { useLocale } from '../contexts/Locale';
@@ -23,14 +26,21 @@ import { LanguageType } from '../contexts/Locale';
 import i18n from '../utils/i18n';
 
 const pages = ['Home', 'Services', 'About'];
+interface toggleColorMode {
+	toggleColorMode: () => void;
+}
+interface NavbarProps {
+	colorMode: toggleColorMode;
+	handleOpen: () => void;
+}
 
-export default function Navbar({ colorMode }) {
+export default function Navbar({ colorMode, handleOpen }: NavbarProps) {
 	const { t } = useTranslation();
 	const theme = useTheme();
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
 		null
 	);
-	const { language, setLanguage } = useLocale();
+	const { setLanguage } = useLocale();
 
 	const chooseLanguage = (event: React.ChangeEvent<HTMLSelectElement>) => {
 		event.preventDefault();
@@ -145,11 +155,9 @@ export default function Navbar({ colorMode }) {
 						fontFamily='monospace'
 						fontWeight={700}
 						letterSpacing='.3rem'
-						sx={{
-							textDecoration: 'none',
-						}}
+						sx={{ textDecoration: 'none' }}
 					>
-						{t('Zelaze')}
+						{t('t-zelaze')}
 					</Typography>
 					<Box flexGrow={1} display={{ xs: 'none', md: 'flex' }}>
 						{pages.map((page) => (
@@ -171,21 +179,30 @@ export default function Navbar({ colorMode }) {
 						))}
 					</Box>
 
-					<Box flexGrow={0}>
+					<Box sx={{ flexGrow: 0 }} display={{ xs: 'none', md: 'flex' }}>
+						<Button
+							variant='outlined'
+							color='inherit'
+							startIcon={<SearchIcon />}
+							style={{ border: 'none' }}
+							size='large'
+							onClick={handleOpen}
+						>
+							Search
+						</Button>
 						<NativeSelect
-							defaultValue='Select Language'
+							IconComponent={TranslateIcon}
+							id='language'
+							name='language'
 							title='language'
-							aria-labelledby='language'
 							aria-label='language'
-							inputProps={{
-								name: 'language',
-								id: 'language',
-							}}
 							onChange={chooseLanguage}
 							color='primary'
 						>
 							<option disabled>{t('t-select-lang')}</option>
 							<option value={'en'}>English</option>
+							<option value={'fr'}>Français</option>
+							<option value={'sw'}>Kiswahili</option>
 							<option value={'zh_hans'}>简体中文</option>
 							<option value={'zh_hant'}>正體中文</option>
 							<option value={'he'}>עברית</option>

@@ -12,5 +12,7 @@
 	"t-firstname": "名字",
 	"t-lastname": "姓氏",
 	"t-phone": "電話號碼",
-	"t-confirm-password": "確認密碼"
+	"t-confirm-password": "確認密碼",
+	"t-country": "國家",
+	"t-region": "地區"
 }

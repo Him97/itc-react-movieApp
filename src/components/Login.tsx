@@ -1,4 +1,5 @@
 import * as React from 'react';
+import axios, { AxiosResponse } from 'axios';
 import {
 	Avatar,
 	Box,
@@ -15,7 +16,6 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import pic from '../assets/images/goods1.jpg';
-import { POST } from '../utils/api';
 
 export default function Login() {
 	const { t } = useTranslation();
@@ -27,8 +27,8 @@ export default function Login() {
 	const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		try {
-			const { token } = await POST('/login', { email, password });
-			localStorage.setItem('USER', JSON.stringify(token));
+			const response = await axios.post('/login', { email, password });
+			localStorage.setItem('USER', JSON.stringify(response.token));
 			console.log('Token saved in localStorage:', localStorage.getItem('USER'));
 			if (localStorage.getItem('USER')) {
 				setTimeout(async () => {
@@ -148,7 +148,12 @@ export default function Login() {
 					display='flex'
 					flexDirection='column'
 					justifyContent='center'
+					borderRadius={1}
 					bgcolor='rgba(0,0,0,0.5)'
+					sx={{
+						':hover': { bgcolor: 'rgba(0,0,0,0.7)' },
+						transitionDuration: '1s',
+					}}
 				>
 					<Link href='/signup' color='primary.light' underline='none'>
 						Do not have an account? Join us now!

@@ -5,6 +5,8 @@ import EN from '../locales/en.json';
 import HE from '../locales/he.json';
 import ZH_HANS from '../locales/zh_hans.json';
 import ZH_HANT from '../locales/zh_hant.json';
+import FR from '../locales/fr.json'
+import SW from '../locales/sw.json'
 
 const resources = {
   en: {
@@ -12,6 +14,12 @@ const resources = {
   },
   he: {
     translation: HE
+  },
+  fr: {
+    translation: FR
+  },
+  sw: {
+    translation: SW
   },
   zh_hans: {
     translation: ZH_HANS

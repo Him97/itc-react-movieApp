@@ -6,6 +6,7 @@ import { useGesture } from '@use-gesture/react';
 import hands from '../assets/video/bg-hands.mp4';
 import Login from './Login';
 import Signup from './Signup';
+import Entry from './Entry';
 import Footer from './Footer';
 
 export default function Auth() {
@@ -85,6 +86,8 @@ export default function Auth() {
 					<Login />
 				) : pathname === '/signup' ? (
 					<Signup />
+				) : pathname === '/entry' ? (
+					<Entry />
 				) : null}
 				<Outlet />
 			</animated.div>

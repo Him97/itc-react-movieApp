@@ -8,6 +8,7 @@
     "not samsung <= 21"
   ],
   "hints": {
-    "typescript-config/is-valid": "off"
+    "typescript-config/is-valid": "off",
+    "axe/forms": "off"
   }
 }
