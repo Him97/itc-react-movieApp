@@ -6,8 +6,7 @@ import { useGesture } from '@use-gesture/react';
 import hands from '../assets/video/bg-hands.mp4';
 import Login from './Login';
 import Signup from './Signup';
-import Entry from './Entry';
-import Footer from './Footer';
+import Profile from './Profile';
 
 export default function Auth() {
 	const location = useLocation();
@@ -36,14 +35,10 @@ export default function Auth() {
 	useGesture(
 		{
 			onDrag: ({ active, offset: [x, y] }) =>
-				api({ x, y, scale: active ? 1 : 1.1 }),
-			onPinch: ({ offset: [d] }) => api({ zoom: d / 200 }),
-			onMove: ({ dragging }) =>
-				!dragging &&
-				api({
-					scale: 1.05,
-				}),
-			onHover: ({ hovering }) => !hovering && api({ scale: 1 }),
+				api.start({ x, y }) && scale.start(active ? 1 : 1.1),
+			onPinch: ({ offset: [d] }) => zoom.start(d / 2),
+			onMove: ({ dragging }) => !dragging && scale.start(1.05),
+			onHover: ({ hovering }) => !hovering && scale.start(1),
 			onWheel: ({ event }) => {
 				event.preventDefault();
 			},
@@ -71,27 +66,27 @@ export default function Auth() {
 				position='absolute'
 				zIndex={-1}
 			/>
-			<animated.div
-				ref={target}
-				style={{
-					maxWidth: '90%',
-					display: 'flex',
-					justifyContent: 'center',
-					x,
-					y,
-					scale: to([scale, zoom], (s, z) => s + z),
-				}}
-			>
-				{pathname === '/login' ? (
-					<Login />
-				) : pathname === '/signup' ? (
-					<Signup />
-				) : pathname === '/entry' ? (
-					<Entry />
-				) : null}
-				<Outlet />
-			</animated.div>
-			<Footer />
+			<Box component='div' maxWidth='lg'>
+				<animated.div
+					ref={target}
+					id='auth-div'
+					style={{
+						x,
+						y,
+						scale: to([scale, zoom], (s, z) => s + z),
+						touchAction: 'none',
+					}}
+				>
+					{pathname === '/login' ? (
+						<Login />
+					) : pathname === '/signup' ? (
+						<Signup />
+					) : pathname === '/profile' ? (
+						<Profile />
+					) : null}
+					<Outlet />
+				</animated.div>
+			</Box>
 		</Box>
 	);
 }

@@ -14,5 +14,12 @@
 	"t-phone": "Phone Number",
 	"t-confirm-password": "Confirm Password",
 	"t-country": "Country",
-	"t-region": "Region"
+	"t-region": "Region",
+	"t-create-entry": "Create an Entry",
+	"t-logout": "Log Out",
+	"t-search": "Search",
+	"t-need-help": "Need help?",
+	"t-need-help-desc": "No worries! Let us know what we can offer! Create an entry to share your needs with the community.",
+	"t-give-help": "Want to contribute?",
+	"t-give-help-desc": "We're always looking for new ways to help. Don't hesitate to reach out!"
 }

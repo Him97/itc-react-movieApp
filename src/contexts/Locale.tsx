@@ -11,9 +11,9 @@ interface LocaleContextProps {
 	setLanguage: (language: LanguageType) => void;
 }
 
-const LocaleContext = React.createContext<LocaleContextProps | undefined>(
-	undefined
-);
+export const LocaleContext = React.createContext<
+	LocaleContextProps | undefined
+>(undefined);
 
 const cacheRtl = createCache({
 	key: 'muirtl',
@@ -55,12 +55,4 @@ export const LocaleProvider: React.FC<{ children: React.ReactNode }> = ({
 			</LocaleContext.Provider>
 		</CacheProvider>
 	);
-};
-
-export const useLocale = () => {
-	const context = React.useContext(LocaleContext);
-	if (!context) {
-		throw new Error('useLocale must be used within a LocaleProvider');
-	}
-	return context;
 };

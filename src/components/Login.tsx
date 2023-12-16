@@ -11,23 +11,26 @@ import {
 	TextField,
 	Typography,
 } from '@mui/material';
-import { ThemeContext } from '@emotion/react';
+import { useTheme } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import pic from '../assets/images/goods1.jpg';
 
 export default function Login() {
+	interface Token extends AxiosResponse {
+		token: string;
+	}
 	const { t } = useTranslation();
 	const navigate = useNavigate();
-	const theme = React.useContext(ThemeContext);
+	const theme = useTheme();
 	const [email, setEmail] = React.useState<string>('');
 	const [password, setPassword] = React.useState<string>('');
 
 	const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		try {
-			const response = await axios.post('/login', { email, password });
+			const response: Token = await axios.post('/login', { email, password });
 			localStorage.setItem('USER', JSON.stringify(response.token));
 			console.log('Token saved in localStorage:', localStorage.getItem('USER'));
 			if (localStorage.getItem('USER')) {
@@ -47,7 +50,6 @@ export default function Login() {
 			container
 			justifyContent='center'
 			borderRadius={1}
-			md={8}
 			boxShadow={5}
 			maxHeight='10%'
 			bgcolor={

@@ -1,23 +1,21 @@
 import * as React from 'react';
-import { ThemeProvider, createTheme, Theme } from '@mui/material/styles';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { Box, CssBaseline } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import './assets/fonts/HYWenHei-55S.ttf';
 import './assets/fonts/Tangut.ttf';
 import Navbar from './components/Navbar';
 import Router from './utils/Router';
 import Search from './components/Search';
+import Footer from './components/Footer';
 import { ColorModeContext } from './contexts/ColorMode';
 import { LocaleProvider } from './contexts/Locale';
-
-declare module '@mui/material/styles' {
-	interface DefaultTheme extends Theme {}
-}
+import { useLocale } from './utils/useLocale';
 
 export default function App() {
 	type ModeType = 'light' | 'dark';
-	type LanguageType = 'en' | 'he' | 'fr' | 'sw' | 'zh_hans' | 'zh_hant';
 	const [mode, setMode] = React.useState<ModeType>('light');
-	const [language, setLanguage] = React.useState<LanguageType>('en');
+	const { language } = useLocale();
 	const [open, setOpen] = React.useState<boolean>(false);
 
 	const colorMode = React.useMemo(
@@ -29,7 +27,7 @@ export default function App() {
 		[]
 	);
 
-	const DefaultTheme = React.useMemo(
+	const theme = React.useMemo(
 		() =>
 			createTheme({
 				typography: {
@@ -70,11 +68,22 @@ export default function App() {
 
 	return (
 		<ColorModeContext.Provider value={colorMode}>
-			<ThemeProvider theme={DefaultTheme}>
+			<ThemeProvider theme={theme}>
 				<LocaleProvider>
-					<Navbar colorMode={colorMode} handleOpen={handleOpen} />
-					<Router />
-					<Search open={open} handleClose={handleClose} />
+					<Box
+						component='center'
+						position='relative'
+						display='flex'
+						flexDirection='column'
+						minHeight='100vh'
+						sx={{ filter: open ? 'blur(5px)' : 'none' }}
+					>
+						<CssBaseline />
+						<Navbar colorMode={colorMode} handleOpen={handleOpen} />
+						<Router />
+						<Search open={open} handleClose={handleClose} />
+						<Footer />
+					</Box>
 				</LocaleProvider>
 			</ThemeProvider>
 		</ColorModeContext.Provider>

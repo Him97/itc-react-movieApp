@@ -21,11 +21,10 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 import TranslateIcon from '@mui/icons-material/Translate';
 import { useTheme } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';
-import { useLocale } from '../contexts/Locale';
+import { useLocale } from '../utils/useLocale';
 import { LanguageType } from '../contexts/Locale';
 import i18n from '../utils/i18n';
 
-const pages = ['Home', 'Services', 'About'];
 interface toggleColorMode {
 	toggleColorMode: () => void;
 }
@@ -35,12 +34,15 @@ interface NavbarProps {
 }
 
 export default function Navbar({ colorMode, handleOpen }: NavbarProps) {
+	const { setLanguage } = useLocale();
 	const { t } = useTranslation();
 	const theme = useTheme();
+
+	const pages = ['Home', 'Services', 'About'];
+
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
 		null
 	);
-	const { setLanguage } = useLocale();
 
 	const chooseLanguage = (event: React.ChangeEvent<HTMLSelectElement>) => {
 		event.preventDefault();
@@ -59,7 +61,7 @@ export default function Navbar({ colorMode, handleOpen }: NavbarProps) {
 
 	return (
 		<AppBar
-			position='fixed'
+			position='absolute'
 			style={{
 				backgroundColor:
 					theme.palette.mode === 'dark'

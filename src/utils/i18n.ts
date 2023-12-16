@@ -32,7 +32,6 @@ const resources = {
 i18n
   .use(initReactI18next)
   .init({
-    compatabilityJSON: "v3",
     resources,
     lng: "en",
     debug: true,

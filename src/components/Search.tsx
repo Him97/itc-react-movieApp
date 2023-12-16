@@ -1,7 +1,7 @@
 import * as React from 'react';
 import axios from 'axios';
 import { styled, alpha } from '@mui/material/styles';
-import { ThemeContext } from '@emotion/react';
+import { useTheme } from '@mui/material/styles';
 import {
 	Backdrop,
 	Box,
@@ -21,7 +21,7 @@ import { debounce } from 'lodash';
 interface FadeProps {
 	children: React.ReactElement;
 	in?: boolean;
-	onClick?: (node: HTMLElement, isAppearing: boolean) => void;
+	onClick?: unknown;
 	onEnter?: (node: HTMLElement, isAppearing: boolean) => void;
 	onExited?: (node: HTMLElement, isAppearing: boolean) => void;
 	ownerState?: unknown;
@@ -33,6 +33,7 @@ interface SearchProps {
 }
 
 interface SearchResult {
+	id: number;
 	isGivingHelp: boolean;
 	category: string;
 	country: string;
@@ -79,8 +80,8 @@ const Fade = React.forwardRef<HTMLDivElement, FadeProps>(
 
 export default function Search({ open, handleClose }: SearchProps) {
 	const { t } = useTranslation();
-	const theme = React.useContext(ThemeContext);
-	const [searchResults, setSearchResults] = React.useState<object>([]);
+	const theme = useTheme();
+	const [searchResults, setSearchResults] = React.useState<SearchResult[]>([]);
 	const [searchTerm, setSearchTerm] = React.useState<string>('');
 
 	const style = {

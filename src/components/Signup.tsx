@@ -10,7 +10,7 @@ import {
 	TextField,
 	Typography,
 } from '@mui/material';
-import { ThemeContext } from '@emotion/react';
+import { useTheme } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -24,16 +24,16 @@ export default function Signup() {
 
 	const { t } = useTranslation();
 	const navigate = useNavigate();
-	const theme = React.useContext<object>(ThemeContext);
+	const theme = useTheme();
 	const [firstname, setFirstname] = React.useState<string>('');
 	const [lastname, setLastname] = React.useState<string>('');
 	const [email, setEmail] = React.useState<string>('');
 	const [phone, setPhone] = React.useState<string>('');
 	const [password, setPassword] = React.useState<string>('');
 	const [confirmPassword, setConfirmPassword] = React.useState<string>('');
-	const [countries, setCountries] = React.useState<object>([]);
+	const [countries, setCountries] = React.useState<Country[]>([]);
 	const [country, setCountry] = React.useState<string>('');
-	const [regions, setRegions] = React.useState<object>([]);
+	const [regions, setRegions] = React.useState<Array<string>>([]);
 	const [region, setRegion] = React.useState<string>('');
 
 	React.useEffect(() => {
@@ -55,21 +55,20 @@ export default function Signup() {
 
 	React.useEffect(() => {
 		const getRegions = async () => {
-			const body = {
-				country: country,
-			};
-			try {
-				const response = await axios.post(
-					`https://countriesnow.space/api/v0.1/countries/cities`,
-					body
-				);
-				const data = await response.data;
-				console.log(data);
-				if (data.error === false) {
-					setRegions(data.data);
+			if (country !== '') {
+				try {
+					const response = await axios.post(
+						`https://countriesnow.space/api/v0.1/countries/cities`,
+						{ country: country }
+					);
+					const data = await response.data;
+					console.log(data);
+					if (data.error === false) {
+						setRegions(data.data);
+					}
+				} catch (error) {
+					console.log(error);
 				}
-			} catch (error) {
-				console.log(error);
 			}
 		};
 		getRegions();
@@ -101,7 +100,6 @@ export default function Signup() {
 			container
 			justifyContent='center'
 			borderRadius={1}
-			md={8}
 			boxShadow={5}
 			maxHeight='10%'
 			bgcolor={

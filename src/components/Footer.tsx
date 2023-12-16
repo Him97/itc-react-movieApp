@@ -1,11 +1,10 @@
-import * as React from 'react';
 import { Box, Link, Typography } from '@mui/material';
-import { ThemeContext } from '@emotion/react';
+import { useTheme } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 export default function Footer() {
 	const { t } = useTranslation();
-	const theme = React.useContext<object>(ThemeContext);
+	const theme = useTheme();
 
 	return (
 		<Box
@@ -19,10 +18,7 @@ export default function Footer() {
 					: 'rgba(255, 255, 255, 0.7)'
 			}
 			mt='auto'
-			py={3}
-			px={2}
-			position='fixed'
-			bottom='0'
+			p={3}
 		>
 			<Typography color='text.secondary' maxWidth='sm'>
 				{t('t-copyright')}

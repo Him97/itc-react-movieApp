@@ -11,7 +11,7 @@ export default function Router() {
 				<Route path='/home' element={<Home />}></Route>
 				<Route path='/signup' element={<Auth />}></Route>
 				<Route path='/login' element={<Auth />}></Route>
-				<Route path='/entry' element={<Auth />}></Route>
+				<Route path='/profile' element={<Auth />}></Route>
 				<Route path='*' element={<NotFound />}></Route>
 			</Routes>
 		</BrowserRouter>
