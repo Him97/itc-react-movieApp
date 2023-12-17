@@ -1,16 +1,16 @@
 {
 	"t-zelaze": "Zelaze",
 	"t-welcome-to": "Bienvenue sur ",
-	"p-intro": "Welcome to Zelaze, your go-to platform for customized mutual help services. Zelaze addresses this challenge by providing a platform that accurately defines and communicates the real-time needs of individuals and groups. We connect those in need with individuals and communities willing to offer assistance ensuring aid is targeted and avoiding duplication. Whether you're looking to support your local community or extend a helping hand internationally, Zelaze is your hub for creating and fulfilling meaningful needs. You can easily create your own need page, specifying whether you require objects or services, and share it with your network. Join Zelaze, be part of a international network of solidarity, and contribute to building a global community where assistance is personalized, impactful, and efficiently delivered.",
-	"t-signup": "Sign Up",
-	"t-login": "Log In",
-	"t-select-lang": "Select Language",
+	"p-intro": "Bienvenue sur Zelaze, votre plateforme de référence pour des services d'entraide personnalisés. Zelaze relève ce défi en fournissant une plateforme qui définit et communique avec précision les besoins en temps réel des individus et de différentes communautés. Nous mettons en relation les personnes dans le besoin avec les individus et les communautés désireux d'offrir leur assistance, en veillant à ce que l'aide soit ciblée tout en évitant les doublons. Que vous cherchiez à soutenir votre communauté locale ou à tendre la main à l'international, Zelaze est le site de référence pour offrir son aide et satisfaire des besoins significatifs. Vous pouvez facilement créer votre propre page de besoin, puis la partager avec votre réseau. Rejoignez Zelaze, faites partie d'un réseau international de solidarité et contribuez à la construction d'une communauté mondiale où l'aide est personnalisée, impactante et efficace.",
+	"t-signup": "Inscription",
+	"t-login": "Connexion",
+	"t-select-lang": "Selection de la langue",
 	"t-copyright": "Copyright",
-	"t-email": "Email Address",
-	"t-invalid-email": "Invalid Email",
+	"t-email": "Adresse email",
+	"t-invalid-email": "Email invalide",
 	"t-password": "Mot de passe",
-	"t-firstname": "First Name",
-	"t-lastname": "Last Name",
-	"t-phone": "Phone Number",
-	"t-confirm-password": "Confirm Password"
+	"t-firstname": "Prénom",
+	"t-lastname": "Nom de famille",
+	"t-phone": "Numéro de téléphone",
+	"t-confirm-password": "Confirmation du mot de passe"
 }
