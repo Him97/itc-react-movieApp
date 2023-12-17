@@ -1,6 +1,23 @@
 import * as React from 'react';
-import { styled } from '@mui/material/styles';
-import { Backdrop, Box, ButtonBase, Modal, Typography } from '@mui/material';
+import axios from 'axios';
+import { POST } from '../utils/api';
+import { styled, useTheme } from '@mui/material/styles';
+import {
+	Avatar,
+	Backdrop,
+	Box,
+	Button,
+	ButtonBase,
+	Checkbox,
+	Grid,
+	FormControl,
+	FormControlLabel,
+	InputLabel,
+	NativeSelect,
+	Modal,
+	OutlinedInput,
+	Typography,
+} from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useSpring, animated } from '@react-spring/web';
 import pic1 from '../assets/images/needhelp.jpg';
@@ -131,7 +148,25 @@ const ImageMarked = styled('span')(({ theme }) => ({
 }));
 
 export default function Entry({ open, handleClose }: EntryProps) {
+	interface Country {
+		name: string;
+		iso2: string;
+	}
+
 	const { t } = useTranslation();
+	const theme = useTheme();
+	const [isCreating, setIsCreating] = React.useState<boolean>(false);
+	const [isGivingHelp, setIsGivingHelp] = React.useState<boolean>(false);
+	const [category, setCategory] = React.useState<string>('');
+	const [subcategory, setSubcategory] = React.useState<string>('');
+	const [countries, setCountries] = React.useState<Country[]>([]);
+	const [country, setCountry] = React.useState<string>('');
+	const [regions, setRegions] = React.useState<Array<string>>([]);
+	const [region, setRegion] = React.useState<string>('');
+	const [title, setTitle] = React.useState<string>('');
+	const [description, setDescription] = React.useState<string>('');
+	const [image, setImage] = React.useState<string>('');
+	const [isUrgent, setIsUrgent] = React.useState<boolean>(false);
 
 	const style = {
 		position: 'absolute',
@@ -162,6 +197,64 @@ export default function Entry({ open, handleClose }: EntryProps) {
 		},
 	];
 
+	React.useEffect(() => {
+		const getCountries = async () => {
+			try {
+				const response = await axios.get(
+					'https://countriesnow.space/api/v0.1/countries/positions'
+				);
+				const data = await response.data;
+				if (data.error === false) {
+					setCountries(data.data);
+				}
+			} catch (error) {
+				console.log(error);
+			}
+		};
+		getCountries();
+	}, []);
+
+	React.useEffect(() => {
+		const getRegions = async () => {
+			if (country !== '') {
+				try {
+					const response = await axios.post(
+						`https://countriesnow.space/api/v0.1/countries/cities`,
+						{ country: country }
+					);
+					const data = await response.data;
+					console.log(data);
+					if (data.error === false) {
+						setRegions(data.data);
+					}
+				} catch (error) {
+					console.log(error);
+				}
+			}
+		};
+		getRegions();
+	}, [country]);
+
+	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		const body = {
+			isGivingHelp,
+			category: category + subcategory,
+			country: country + region,
+			title,
+			description,
+			isUrgent,
+		};
+		const data = await POST('/entries', body);
+		if (data) {
+			setTimeout(async () => {
+				console.log('did it work?' + data);
+			}, 1000);
+		} else {
+			console.log('error');
+		}
+	};
+
 	return (
 		<Modal
 			keepMounted
@@ -186,6 +279,10 @@ export default function Entry({ open, handleClose }: EntryProps) {
 							style={{
 								width: image.width,
 								borderRadius: 1,
+							}}
+							onClick={() => {
+								setIsCreating(true);
+								handleSubmit(image.type);
 							}}
 						>
 							<ImageSrc
@@ -223,6 +320,170 @@ export default function Entry({ open, handleClose }: EntryProps) {
 							</Image>
 						</ImageButton>
 					))}
+					<Grid
+						container
+						justifyContent='center'
+						borderRadius={1}
+						boxShadow={5}
+						maxHeight='10%'
+						bgcolor={
+							theme.palette.mode === 'dark'
+								? 'rgba(0, 0, 0, 0.7)'
+								: 'rgba(255, 255, 255, 0.7)'
+						}
+					>
+						<Grid
+							item
+							xs={12}
+							sm={6}
+							md={6}
+							lg={6}
+							p={4}
+							display='flex'
+							flexDirection='column'
+							alignItems='center'
+						>
+							<Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}></Avatar>
+							<Typography component='h1' variant='h5'>
+								{t('t-entry-for')}
+							</Typography>
+							<Box component='form' noValidate onSubmit={handleSubmit}>
+								<NativeSelect
+									id='category'
+									name='category'
+									title='category'
+									aria-label='category'
+									color='primary'
+									onChange={(event) => {
+										setCategory(event.target.value);
+									}}
+									placeholder={t('t-category')}
+								>
+									<option disabled>{t('t-category')}</option>
+									<option value={'product'}>{t('t-product')}</option>
+									<option value={'service'}>{t('t-service')}</option>
+									<option value={'time'}>{t('t-time')}</option>
+								</NativeSelect>
+								<NativeSelect
+									id='sub-category'
+									name='sub-category'
+									title='sub-category'
+									aria-label='sub-category'
+									color='primary'
+									onChange={(event) => setSubcategory(event.target.value)}
+									placeholder={t('t-sub-category')}
+								>
+									<option disabled>{t('t-subcategory')}</option>
+									<option value={'product'}>{t('t-product')}</option>
+									<option value={'service'}>{t('t-service')}</option>
+									<option value={'time'}>{t('t-time')}</option>
+								</NativeSelect>
+								<NativeSelect
+									id='country'
+									name='country'
+									title='country'
+									aria-label='country'
+									color='primary'
+									onChange={(event) => setCountry(event.target.value)}
+									placeholder={t('t-country')}
+									fullWidth
+								>
+									<option disabled>{t('t-country')}</option>
+									{countries.map((item: Country) => (
+										<option key={item.iso2} value={item.name}>
+											{item.name}
+										</option>
+									))}
+								</NativeSelect>
+								<NativeSelect
+									id='region'
+									name='region'
+									title='region'
+									aria-label='region'
+									color='primary'
+									onChange={(event) => setRegion(event.target.value)}
+									placeholder={t('t-region')}
+									fullWidth
+								>
+									<option disabled>{t('t-region')}</option>
+									{regions.map((item: string) => (
+										<option key={item} value={item}>
+											{item}
+										</option>
+									))}
+								</NativeSelect>
+								<FormControl fullWidth variant='outlined' margin='normal'>
+									<InputLabel htmlFor='title'>{t('t-title')}</InputLabel>
+									<OutlinedInput
+										required
+										id='title'
+										name='title'
+										type='title'
+										label={t('t-title')}
+										value={title}
+										onChange={(event) => setTitle(event.target.value)}
+									/>
+								</FormControl>
+								<FormControl fullWidth variant='outlined' margin='normal'>
+									<InputLabel htmlFor='description'>
+										{t('t-description')}
+									</InputLabel>
+									<OutlinedInput
+										required
+										id='description'
+										name='description'
+										type='description'
+										label={t('t-description')}
+										value={description}
+										onChange={(event) => setDescription(event.target.value)}
+									/>
+								</FormControl>
+								<FormControlLabel
+									control={
+										<Checkbox
+											name='urgent'
+											checked={isUrgent}
+											onChange={(event) => setIsUrgent(event.target.checked)}
+										/>
+									}
+									label={t('t-urgent')}
+								/>
+								<Button
+									type='submit'
+									fullWidth
+									variant='outlined'
+									sx={{ my: 3 }}
+								>
+									{t('t-submit')}
+								</Button>
+							</Box>
+						</Grid>
+						<Grid
+							item
+							xs={12}
+							sm={6}
+							md={6}
+							lg={6}
+							sx={{
+								backgroundImage: `url(${pic1})`,
+								backgroundSize: 'auto 100%',
+								backgroundPositionX: 'center',
+							}}
+						>
+							<Box
+								height='100%'
+								display='flex'
+								flexDirection='column'
+								justifyContent='center'
+								borderRadius={1}
+								bgcolor='rgba(0,0,0,0.5)'
+								sx={{
+									':hover': { bgcolor: 'rgba(0,0,0,0.7)' },
+									transitionDuration: '1s',
+								}}
+							></Box>
+						</Grid>
+					</Grid>
 				</Box>
 			</Fade>
 		</Modal>

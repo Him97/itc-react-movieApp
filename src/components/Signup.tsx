@@ -1,15 +1,23 @@
 import * as React from 'react';
 import axios from 'axios';
+import { POST } from '../utils/api';
 import {
 	Avatar,
 	Box,
 	Button,
+	FormControl,
+	FormHelperText,
 	Grid,
+	IconButton,
+	InputAdornment,
+	InputLabel,
 	Link,
 	NativeSelect,
-	TextField,
+	OutlinedInput,
 	Typography,
 } from '@mui/material';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useTheme } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -31,6 +39,7 @@ export default function Signup() {
 	const [phone, setPhone] = React.useState<string>('');
 	const [password, setPassword] = React.useState<string>('');
 	const [confirmPassword, setConfirmPassword] = React.useState<string>('');
+	const [showPassword, setShowPassword] = React.useState<boolean>(false);
 	const [countries, setCountries] = React.useState<Country[]>([]);
 	const [country, setCountry] = React.useState<string>('');
 	const [regions, setRegions] = React.useState<Array<string>>([]);
@@ -74,6 +83,14 @@ export default function Signup() {
 		getRegions();
 	}, [country]);
 
+	const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+	const handleMouseDownPassword = (
+		event: React.MouseEvent<HTMLButtonElement>
+	) => {
+		event.preventDefault();
+	};
+
 	const handleSignup = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		const body = {
@@ -84,8 +101,10 @@ export default function Signup() {
 			country,
 			region,
 			password,
+			bio: '',
+			admin: false,
 		};
-		const data = await axios.post('/register', body);
+		const data = await POST('/auth/register', body);
 		if (data) {
 			setTimeout(async () => {
 				navigate('/login');
@@ -156,60 +175,66 @@ export default function Signup() {
 					{t('t-signup')}
 				</Typography>
 				<Box component='form' noValidate onSubmit={handleSignup}>
-					<TextField
-						margin='normal'
-						autoComplete='given-name'
-						name='firstname'
-						required
-						id='firstname'
-						label={t('t-firstname')}
-						autoFocus
-						onChange={(event) => setFirstname(event.target.value)}
-						value={firstname}
-					/>
-					<TextField
-						margin='normal'
-						required
-						id='lastname'
-						label={t('t-lastname')}
-						name='lastname'
-						autoComplete='family-name'
-						onChange={(event) => setLastname(event.target.value)}
-						value={lastname}
-					/>
-					<TextField
-						margin='normal'
-						required
-						fullWidth
-						id='email'
-						label={t('t-email')}
-						name='email'
-						autoComplete='email'
-						onChange={(event) => setEmail(event.target.value)}
-						value={email}
-						error={
-							email !== '' &&
-							!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)
-						}
-						helperText={
-							email !== '' &&
-							!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)
+					<FormControl fullWidth variant='outlined' margin='normal'>
+						<InputLabel htmlFor='firstname'>{t('t-firstname')}</InputLabel>
+						<OutlinedInput
+							required
+							id='firstname'
+							name='firstname'
+							type='firstname'
+							label={t('t-firstname')}
+							value={firstname}
+							onChange={(event) => setFirstname(event.target.value)}
+						/>
+					</FormControl>
+					<FormControl fullWidth variant='outlined' margin='normal'>
+						<InputLabel htmlFor='lastname'>{t('t-lastname')}</InputLabel>
+						<OutlinedInput
+							required
+							id='lastname'
+							name='lastname'
+							type='lastname'
+							label={t('t-lastname')}
+							value={lastname}
+							onChange={(event) => setLastname(event.target.value)}
+						/>
+					</FormControl>
+					<FormControl fullWidth variant='outlined' margin='normal'>
+						<InputLabel htmlFor='email'>{t('t-email')}</InputLabel>
+						<OutlinedInput
+							required
+							id='email'
+							name='email'
+							type='email'
+							label={t('t-email')}
+							error={
+								email !== '' &&
+								!/^([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4})$/i.test(email)
+							}
+							value={email}
+							onChange={(event) => setEmail(event.target.value)}
+						/>
+						<FormHelperText>
+							{email !== '' &&
+							!/^([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4})$/i.test(email)
 								? t('t-invalid-email')
-								: ''
-						}
-					/>
-					<TextField
-						margin='normal'
-						fullWidth
-						name='phone'
-						label={t('t-phone')}
-						type='text'
-						id='phone'
-						autoComplete='phone-number'
-						onChange={(event) => setPhone(event.target.value)}
-						value={phone}
-					/>
+								: ''}
+						</FormHelperText>
+					</FormControl>
+					<FormControl fullWidth variant='outlined' margin='normal'>
+						<InputLabel htmlFor='phone'>{t('t-phone')}</InputLabel>
+						<OutlinedInput
+							required
+							id='phone'
+							name='phone'
+							type='phone'
+							label={t('t-phone')}
+							value={phone}
+							onChange={(event) => setPhone(event.target.value)}
+						/>
+					</FormControl>
 					<NativeSelect
+						fullWidth
 						onChange={(event) => setCountry(event.target.value)}
 						placeholder={t('t-country')}
 					>
@@ -221,6 +246,7 @@ export default function Signup() {
 						))}
 					</NativeSelect>
 					<NativeSelect
+						fullWidth
 						onChange={(event) => setRegion(event.target.value)}
 						placeholder={t('t-region')}
 					>
@@ -231,33 +257,61 @@ export default function Signup() {
 							</option>
 						))}
 					</NativeSelect>
-					<TextField
-						margin='normal'
-						required
-						fullWidth
-						name='password'
-						label={t('t-password')}
-						type='password'
-						id='password'
-						autoComplete='new-password'
-						onChange={(event) => setPassword(event.target.value)}
-						value={password}
-					/>
-					<TextField
-						margin='normal'
-						required
-						fullWidth
-						name='confirmPassword'
-						label={t('t-confirm-password')}
-						type='password'
-						id='confirmPassword'
-						value={confirmPassword}
-						onChange={(event) => setConfirmPassword(event.target.value)}
-						error={password !== confirmPassword}
-						helperText={
-							password !== confirmPassword ? t('t-password-not-match') : null
-						}
-					/>
+					<FormControl fullWidth variant='outlined' margin='normal'>
+						<InputLabel htmlFor='password'>{t('t-password')}</InputLabel>
+						<OutlinedInput
+							required
+							id='password'
+							name='password'
+							type={showPassword ? 'text' : 'password'}
+							endAdornment={
+								<InputAdornment position='end'>
+									<IconButton
+										aria-label='toggle password visibility'
+										onClick={handleClickShowPassword}
+										onMouseDown={handleMouseDownPassword}
+										edge='end'
+									>
+										{showPassword ? <VisibilityOff /> : <Visibility />}
+									</IconButton>
+								</InputAdornment>
+							}
+							label={t('t-password')}
+							value={password}
+							onChange={(event) => setPassword(event.target.value)}
+						/>
+					</FormControl>
+					<FormControl fullWidth variant='outlined' margin='normal'>
+						<InputLabel htmlFor='confirm-password'>
+							{t('t-confirm-password')}
+						</InputLabel>
+						<OutlinedInput
+							required
+							id='confirm-password'
+							name='confirm-password'
+							type={showPassword ? 'text' : 'password'}
+							endAdornment={
+								<InputAdornment position='end'>
+									<IconButton
+										aria-label='toggle password visibility'
+										onClick={handleClickShowPassword}
+										onMouseDown={handleMouseDownPassword}
+										edge='end'
+									>
+										{showPassword ? <VisibilityOff /> : <Visibility />}
+									</IconButton>
+								</InputAdornment>
+							}
+							label={t('t-confirm-password')}
+							value={confirmPassword}
+							onChange={(event) => setConfirmPassword(event.target.value)}
+						/>
+						<FormHelperText error>
+							{confirmPassword != '' && password !== confirmPassword
+								? t('t-password-mismatch')
+								: null}
+						</FormHelperText>
+					</FormControl>
 					<Button
 						type='submit'
 						fullWidth

@@ -4,7 +4,7 @@ import { CacheProvider } from '@emotion/react';
 import createCache from '@emotion/cache';
 import { prefixer } from 'stylis';
 
-export type LanguageType = 'en' | 'he' | 'zh_hans' | 'zh_hant';
+export type LanguageType = 'en' | 'he' | 'fr' | 'sw' | 'zh_hans' | 'zh_hant';
 
 interface LocaleContextProps {
 	language: LanguageType;

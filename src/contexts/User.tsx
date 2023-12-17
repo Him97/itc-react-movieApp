@@ -1,52 +1,43 @@
 import * as React from 'react';
-import axios from 'axios';
+import { GET } from '../utils/api';
 
-interface UserContextProps {
+type UserObj = {
 	id: number;
 	fisrtName: string;
 	lastName: string;
 	email: string;
 	phone: string;
 	password: string;
-	bio: string;
-	admin: boolean;
+	bio: string | null;
+	admin: boolean | null;
+};
+interface UserContextProps {
+	user: UserObj | object;
 }
 
-const UserContext = React.createContext<UserContextProps | undefined>(
+export const UserContext = React.createContext<UserContextProps | undefined>(
 	undefined
 );
 
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 	children,
 }) => {
-	const token = localStorage.getItem('token');
+	const [user, setUser] = React.useState<UserContextProps | object>({});
+	const token = localStorage.getItem('USER');
+	console.log(token);
 	React.useEffect(() => {
 		const handleGetUser = async () => {
 			if (token) {
-				const response = await axios.get('/login', {
+				const response: UserContextProps = await GET('/auth/login', {
 					headers: { Authorization: token },
 				});
-				console.log(response.data);
+				setUser(response);
 			}
 		};
-
 		handleGetUser();
 	}, [token]);
 
 	return (
-		<UserContext.Provider
-			value={{
-				id: 0,
-				fisrtName: '',
-				lastName: '',
-				email: '',
-				phone: '',
-				password: '',
-				bio: '',
-				admin: false,
-			}}
-		>
-			{children}
-		</UserContext.Provider>
+		<UserContext.Provider value={{ user }}>{children}</UserContext.Provider>
 	);
 };

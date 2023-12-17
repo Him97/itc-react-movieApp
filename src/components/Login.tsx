@@ -1,16 +1,24 @@
 import * as React from 'react';
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
+import { POST } from '../utils/api';
 import {
 	Avatar,
 	Box,
 	Button,
 	Checkbox,
+	FormControl,
 	FormControlLabel,
+	FormHelperText,
 	Grid,
+	IconButton,
+	InputAdornment,
+	InputLabel,
 	Link,
-	TextField,
+	OutlinedInput,
 	Typography,
 } from '@mui/material';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useTheme } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -26,12 +34,22 @@ export default function Login() {
 	const theme = useTheme();
 	const [email, setEmail] = React.useState<string>('');
 	const [password, setPassword] = React.useState<string>('');
+	const [showPassword, setShowPassword] = React.useState<boolean>(false);
+
+	const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+	const handleMouseDownPassword = (
+		event: React.MouseEvent<HTMLButtonElement>
+	) => {
+		event.preventDefault();
+	};
 
 	const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		try {
-			const response: Token = await axios.post('/login', { email, password });
-			localStorage.setItem('USER', JSON.stringify(response.token));
+			const response: Token = await POST('/auth/login', { email, password });
+			console.log('Token:', response);
+			localStorage.setItem('USER', JSON.stringify(response));
 			console.log('Token saved in localStorage:', localStorage.getItem('USER'));
 			if (localStorage.getItem('USER')) {
 				setTimeout(async () => {
@@ -76,41 +94,52 @@ export default function Login() {
 					{t('t-login')}
 				</Typography>
 				<Box component='form' noValidate onSubmit={handleLogin}>
-					<TextField
-						margin='normal'
-						required
-						fullWidth
-						id='email'
-						label={t('t-email')}
-						name='email'
-						autoComplete='email'
-						autoFocus
-						onChange={(e) => setEmail(e.target.value)}
-						value={email}
-						error={
-							email !== '' &&
-							!/^([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4})$/i.test(email)
-						}
-						helperText={
-							email !== '' &&
+					<FormControl fullWidth variant='outlined' margin='normal'>
+						<InputLabel htmlFor='email'>{t('t-email')}</InputLabel>
+						<OutlinedInput
+							required
+							id='email'
+							name='email'
+							type='email'
+							label={t('t-email')}
+							error={
+								email !== '' &&
+								!/^([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4})$/i.test(email)
+							}
+							value={email}
+							onChange={(event) => setEmail(event.target.value)}
+						/>
+						<FormHelperText error>
+							{email !== '' &&
 							!/^([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4})$/i.test(email)
 								? t('t-invalid-email')
-								: ''
-						}
-					/>
-					<TextField
-						margin='normal'
-						required
-						fullWidth
-						name='password'
-						label={t('t-password')}
-						type='password'
-						id='password'
-						autoComplete='current-password'
-						onChange={(e) => setPassword(e.target.value)}
-						value={password}
-					/>
-
+								: ''}
+						</FormHelperText>
+					</FormControl>
+					<FormControl fullWidth variant='outlined' margin='normal'>
+						<InputLabel htmlFor='password'>{t('t-password')}</InputLabel>
+						<OutlinedInput
+							required
+							id='password'
+							name='password'
+							type={showPassword ? 'text' : 'password'}
+							endAdornment={
+								<InputAdornment position='end'>
+									<IconButton
+										aria-label='toggle password visibility'
+										onClick={handleClickShowPassword}
+										onMouseDown={handleMouseDownPassword}
+										edge='end'
+									>
+										{showPassword ? <VisibilityOff /> : <Visibility />}
+									</IconButton>
+								</InputAdornment>
+							}
+							label={t('t-password')}
+							value={password}
+							onChange={(event) => setPassword(event.target.value)}
+						/>
+					</FormControl>
 					<FormControlLabel
 						control={<Checkbox value='remember' color='primary' />}
 						label='Remember me'

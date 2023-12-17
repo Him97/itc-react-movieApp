@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Box, Button, ButtonGroup, Grid, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import { UserContext } from '../contexts/User';
 import { useTranslation } from 'react-i18next';
 import { Parallax, ParallaxLayer, IParallax } from '@react-spring/parallax';
 import Entry from './Entry';
@@ -11,6 +12,7 @@ import team from '../assets/video/bg-team.mp4';
 export default function Home() {
 	const { t } = useTranslation();
 	const theme = useTheme();
+	const user = React.useContext(UserContext);
 	const [loopNum, setLoopNum] = React.useState<number>(0);
 	const [isDeleting, setIsDeleting] = React.useState<boolean>(false);
 	const [text, setText] = React.useState<string>('');
@@ -157,43 +159,46 @@ export default function Home() {
 								<Typography paragraph fontFamily='Karla' my={4}>
 									{t('p-intro')}
 								</Typography>
-								<ButtonGroup>
-									<Button
-										variant='outlined'
-										size='large'
-										color='inherit'
-										href='/signup'
-									>
-										{t('t-signup')}
-									</Button>
-									<Button
-										variant='outlined'
-										size='large'
-										color='inherit'
-										href='/login'
-									>
-										{t('t-login')}
-									</Button>
-								</ButtonGroup>
-								<ButtonGroup>
-									<Entry open={createEntry} handleClose={handleCloseEntry} />
-									<Button
-										variant='outlined'
-										size='large'
-										color='inherit'
-										onClick={() => handleCreateEntry()}
-									>
-										{t('t-create-entry')}
-									</Button>
-									<Button
-										variant='outlined'
-										size='large'
-										color='inherit'
-										onClick={handleLogout}
-									>
-										{t('t-logout')}
-									</Button>
-								</ButtonGroup>
+								{user && user.id == 0 ? (
+									<ButtonGroup>
+										<Button
+											variant='outlined'
+											size='large'
+											color='inherit'
+											href='/signup'
+										>
+											{t('t-signup')}
+										</Button>
+										<Button
+											variant='outlined'
+											size='large'
+											color='inherit'
+											href='/login'
+										>
+											{t('t-login')}
+										</Button>
+									</ButtonGroup>
+								) : (
+									<ButtonGroup>
+										<Entry open={createEntry} handleClose={handleCloseEntry} />
+										<Button
+											variant='outlined'
+											size='large'
+											color='inherit'
+											onClick={() => handleCreateEntry()}
+										>
+											{t('t-create-entry')}
+										</Button>
+										<Button
+											variant='outlined'
+											size='large'
+											color='inherit'
+											onClick={handleLogout}
+										>
+											{t('t-logout')}
+										</Button>
+									</ButtonGroup>
+								)}
 							</Grid>
 							<Grid
 								item

@@ -1,97 +1,76 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-
-interface ErrorResponse {
-  status: number;
-  data: {
-    message?: string;
-  };
-}
+import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: 'http://localhost:2555',
 });
 
-const getHeaders = (): AxiosRequestConfig => {
+const getHeaders = () => {
   return {
     headers: {
-      'Authorization': `${localStorage.getItem('USER')}`,
+      Authorization: `${localStorage.getItem("USER")}`,
     },
   };
 };
 
-export const GET = async (url: string, params = {}): Promise<unknown> => {
+export const GET = async <T>(url: string, params?: AxiosRequestConfig): Promise<T> => {
   try {
-    const resp = await api.get(url, { ...getHeaders(), params });
-    return resp;
+    const resp = await api.get<T>(url, { ...getHeaders(), ...params });
+    return resp.data;
   } catch (error) {
     handleError(error);
+    throw error;
   }
 };
 
-export const POST = async (url: string, body: object): Promise<unknown> => {
-  if (url === '/login') {
-    try {
-      const resp = await api.post(url, body, { withCredentials: true }, getHeaders());
-      console.log(resp, resp.data);
-      return resp.data;
-    } catch (error) {
-      handleError(error);
-      console.error('Full Error Object:', error);
-      console.log('Response Data:', error.response?.data);
-    }
-  } else {
-    try {
-      console.log(url, body);
-      const resp = await api.post(url, body, getHeaders());
-      console.log(url, body);
-      console.log(resp.data);
-      return resp.data;
-    } catch (error) {
-      handleError(error);
-      console.error('Full Error Object:', error);
-      console.log('Response Data:', error.response?.data);
-    }
-  }
-};
-
-export const PUT = async (url: string, body: any): Promise<any> => {
-  console.log(body);
+export const POST = async <T>(url: string, body: unknown): Promise<T> => {
   try {
-    const resp = await api.put(url, body, getHeaders());
+    const resp = await api.post<T>(url, body, {  ...getHeaders() });
+    console.log(resp, resp.data);
+    return resp.data;
+  } catch (error) {
+    handleError(error);
+    throw error;
+  }
+};
+
+export const PUT = async <T>(url: string, body: unknown): Promise<T> => {
+  try {
+    const resp = await api.put<T>(url, body, getHeaders());
     console.log('PUT ERROR', resp.data);
     return resp.data;
   } catch (error) {
     handleError(error);
+    throw error;
   }
 };
 
-export const DELETE = async (url: string, body: any): Promise<any> => {
-  console.log(body);
+export const DELETE = async <T>(url: string): Promise<T> => {
   try {
-    const resp = await api.delete(url, { data: body });
+    const resp = await api.delete<T>(url);
     console.log('DELETE ERROR', resp.data);
     return resp.data;
-  } catch (error) {
+  } catch (error:AxiosError<unknown>) {
     handleError(error);
+    throw error;
   }
 };
 
-const handleError = (error: ErrorResponse | string): string => {
+const handleError = (error: AxiosError<unknown>) => {
   if (typeof error === 'string') {
-    return 'String error', error;
+    alert('String error', error);
   }
   if (error.response) {
     console.log('Status Code:', error.response.status);
     console.log('Response Data:', error.response.data);
     console.log('Response Headers:', error.response.headers);
     if (error.response.data && error.response.data.message) {
-      return 'Error: ' + error.response.data.message;
+      alert('Error: ' + error.response.data.message);
     } else {
-      return 'An error occurred. Please try again.';
+      alert('An error occurred. Please try again.');
     }
   } else if (error.request) {
-    return 'No response received';
+    alert('No response received');
   } else {
-    return 'error message', error.message;
+    alert('error message', error.message);
   }
 };

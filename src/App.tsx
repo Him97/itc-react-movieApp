@@ -8,6 +8,7 @@ import Navbar from './components/Navbar';
 import Router from './utils/Router';
 import Search from './components/Search';
 import Footer from './components/Footer';
+import { UserProvider } from './contexts/User';
 import { ColorModeContext } from './contexts/ColorMode';
 import { LocaleProvider } from './contexts/Locale';
 import { useLocale } from './utils/useLocale';
@@ -70,20 +71,22 @@ export default function App() {
 		<ColorModeContext.Provider value={colorMode}>
 			<ThemeProvider theme={theme}>
 				<LocaleProvider>
-					<Box
-						component='center'
-						position='relative'
-						display='flex'
-						flexDirection='column'
-						minHeight='100vh'
-						sx={{ filter: open ? 'blur(5px)' : 'none' }}
-					>
-						<CssBaseline />
-						<Navbar colorMode={colorMode} handleOpen={handleOpen} />
-						<Router />
-						<Search open={open} handleClose={handleClose} />
-						<Footer />
-					</Box>
+					<UserProvider>
+						<Box
+							component='center'
+							position='relative'
+							display='flex'
+							flexDirection='column'
+							minHeight='100vh'
+							sx={{ filter: open ? 'blur(5px)' : 'none' }}
+						>
+							<CssBaseline />
+							<Navbar colorMode={colorMode} handleOpen={handleOpen} />
+							<Router />
+							<Search open={open} handleClose={handleClose} />
+							<Footer />
+						</Box>
+					</UserProvider>
 				</LocaleProvider>
 			</ThemeProvider>
 		</ColorModeContext.Provider>
