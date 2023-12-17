@@ -1,43 +1,43 @@
 import * as React from 'react';
 import { GET } from '../utils/api';
 
-type UserObj = {
+export type UserContextProps = {
 	id: number;
 	fisrtName: string;
 	lastName: string;
 	email: string;
-	phone: string;
+	phone: string | null | undefined;
 	password: string;
-	bio: string | null;
+	country: string;
+	region: string;
+	bio: string | null | undefined;
 	admin: boolean | null;
 };
-interface UserContextProps {
-	user: UserObj | object;
-}
 
-export const UserContext = React.createContext<UserContextProps | undefined>(
-	undefined
-);
+export const UserContext = React.createContext<UserContextProps | object>({});
 
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 	children,
 }) => {
 	const [user, setUser] = React.useState<UserContextProps | object>({});
 	const token = localStorage.getItem('USER');
-	console.log(token);
+
 	React.useEffect(() => {
 		const handleGetUser = async () => {
 			if (token) {
-				const response: UserContextProps = await GET('/auth/login', {
-					headers: { Authorization: token },
-				});
-				setUser(response);
+				try {
+					const response: UserContextProps = await GET('/auth/login', {
+						headers: { Authorization: token },
+					});
+					setUser(response);
+				} catch (error) {
+					console.error('Error fetching user:', error);
+				}
 			}
 		};
+
 		handleGetUser();
 	}, [token]);
 
-	return (
-		<UserContext.Provider value={{ user }}>{children}</UserContext.Provider>
-	);
+	return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
 };

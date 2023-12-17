@@ -12,12 +12,15 @@ import {
 	Grid,
 	FormControl,
 	FormControlLabel,
+	IconButton,
 	InputLabel,
 	NativeSelect,
 	Modal,
 	OutlinedInput,
+	Tooltip,
 	Typography,
 } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useTranslation } from 'react-i18next';
 import { useSpring, animated } from '@react-spring/web';
 import pic1 from '../assets/images/needhelp.jpg';
@@ -147,6 +150,18 @@ const ImageMarked = styled('span')(({ theme }) => ({
 	transitionDuration: '1s',
 }));
 
+const VisuallyHiddenInput = styled('input')({
+	clip: 'rect(0 0 0 0)',
+	clipPath: 'inset(50%)',
+	height: 1,
+	overflow: 'hidden',
+	position: 'absolute',
+	bottom: 0,
+	left: 0,
+	whiteSpace: 'nowrap',
+	width: 1,
+});
+
 export default function Entry({ open, handleClose }: EntryProps) {
 	interface Country {
 		name: string;
@@ -155,7 +170,7 @@ export default function Entry({ open, handleClose }: EntryProps) {
 
 	const { t } = useTranslation();
 	const theme = useTheme();
-	const [isCreating, setIsCreating] = React.useState<boolean>(false);
+	const [isCreating, setIsCreating] = React.useState<boolean | null>(null);
 	const [isGivingHelp, setIsGivingHelp] = React.useState<boolean>(false);
 	const [category, setCategory] = React.useState<string>('');
 	const [subcategory, setSubcategory] = React.useState<string>('');
@@ -165,7 +180,9 @@ export default function Entry({ open, handleClose }: EntryProps) {
 	const [region, setRegion] = React.useState<string>('');
 	const [title, setTitle] = React.useState<string>('');
 	const [description, setDescription] = React.useState<string>('');
+	const [availability, setAvailability] = React.useState<string>('');
 	const [image, setImage] = React.useState<string>('');
+	const inputRef = React.useRef<HTMLInputElement>(null);
 	const [isUrgent, setIsUrgent] = React.useState<boolean>(false);
 
 	const style = {
@@ -235,15 +252,31 @@ export default function Entry({ open, handleClose }: EntryProps) {
 		getRegions();
 	}, [country]);
 
+	const handleThumbnail = () => {
+		if (!inputRef.current?.files?.length) {
+			return;
+		}
+		const file = inputRef.current.files[0];
+		const reader = new FileReader();
+		reader.onloadend = () => {
+			const result = reader.result as string;
+			setImage(result);
+		};
+		reader.readAsDataURL(file);
+	};
+
 	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		const body = {
-			isGivingHelp,
-			category: category + subcategory,
-			country: country + region,
+			isgivinghelp: isGivingHelp,
+			category: category + ' ' + subcategory,
+			country: country,
+			town: region,
 			title,
 			description,
-			isUrgent,
+			availability,
+			image,
+			urgent: isUrgent,
 		};
 		const data = await POST('/entries', body);
 		if (data) {
@@ -279,10 +312,11 @@ export default function Entry({ open, handleClose }: EntryProps) {
 							style={{
 								width: image.width,
 								borderRadius: 1,
+								display: isCreating === null ? 'inline-block' : 'none',
 							}}
 							onClick={() => {
 								setIsCreating(true);
-								handleSubmit(image.type);
+								setIsGivingHelp(image.type);
 							}}
 						>
 							<ImageSrc
@@ -331,6 +365,7 @@ export default function Entry({ open, handleClose }: EntryProps) {
 								? 'rgba(0, 0, 0, 0.7)'
 								: 'rgba(255, 255, 255, 0.7)'
 						}
+						display={isCreating === null ? 'none' : 'flex'}
 					>
 						<Grid
 							item
@@ -343,9 +378,19 @@ export default function Entry({ open, handleClose }: EntryProps) {
 							flexDirection='column'
 							alignItems='center'
 						>
+							<Tooltip title={t('t-back')}>
+								<IconButton
+									onClick={() => setIsCreating(null)}
+									size='large'
+									style={{ position: 'absolute', top: 5, left: 5 }}
+								>
+									<ArrowBackIcon />
+								</IconButton>
+							</Tooltip>
 							<Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}></Avatar>
 							<Typography component='h1' variant='h5'>
-								{t('t-entry-for')}
+								{t('t-entry-for')}{' '}
+								{isGivingHelp ? t('t-give-help') : t('t-need-help')}
 							</Typography>
 							<Box component='form' noValidate onSubmit={handleSubmit}>
 								<NativeSelect
@@ -354,9 +399,7 @@ export default function Entry({ open, handleClose }: EntryProps) {
 									title='category'
 									aria-label='category'
 									color='primary'
-									onChange={(event) => {
-										setCategory(event.target.value);
-									}}
+									onChange={(event) => setCategory(event.target.value)}
 									placeholder={t('t-category')}
 								>
 									<option disabled>{t('t-category')}</option>
@@ -371,7 +414,7 @@ export default function Entry({ open, handleClose }: EntryProps) {
 									aria-label='sub-category'
 									color='primary'
 									onChange={(event) => setSubcategory(event.target.value)}
-									placeholder={t('t-sub-category')}
+									placeholder={t('t-subcategory')}
 								>
 									<option disabled>{t('t-subcategory')}</option>
 									<option value={'product'}>{t('t-product')}</option>
@@ -430,12 +473,27 @@ export default function Entry({ open, handleClose }: EntryProps) {
 									</InputLabel>
 									<OutlinedInput
 										required
+										multiline
 										id='description'
 										name='description'
 										type='description'
 										label={t('t-description')}
 										value={description}
 										onChange={(event) => setDescription(event.target.value)}
+									/>
+								</FormControl>
+								<FormControl fullWidth variant='outlined' margin='normal'>
+									<InputLabel htmlFor='availability'>
+										{t('t-availability')}
+									</InputLabel>
+									<OutlinedInput
+										required
+										id='availability'
+										name='availability'
+										type='availability'
+										label={t('t-availability')}
+										value={availability}
+										onChange={(event) => setAvailability(event.target.value)}
 									/>
 								</FormControl>
 								<FormControlLabel
@@ -458,30 +516,50 @@ export default function Entry({ open, handleClose }: EntryProps) {
 								</Button>
 							</Box>
 						</Grid>
-						<Grid
-							item
-							xs={12}
-							sm={6}
-							md={6}
-							lg={6}
-							sx={{
-								backgroundImage: `url(${pic1})`,
-								backgroundSize: 'auto 100%',
-								backgroundPositionX: 'center',
-							}}
-						>
-							<Box
-								height='100%'
-								display='flex'
-								flexDirection='column'
-								justifyContent='center'
-								borderRadius={1}
-								bgcolor='rgba(0,0,0,0.5)'
-								sx={{
-									':hover': { bgcolor: 'rgba(0,0,0,0.7)' },
-									transitionDuration: '1s',
+						<Grid item xs={12} sm={6} md={6} lg={6}>
+							<Button
+								component='label'
+								variant='text'
+								focusRipple
+								style={{
+									width: '100%',
+									height: '100%',
+									borderRadius: 1,
+									[theme.breakpoints.down('sm')]: {
+										width: '100% !important',
+										height: 100,
+									},
 								}}
-							></Box>
+							>
+								<VisuallyHiddenInput
+									type='file'
+									name='image'
+									accept='image/*'
+									ref={inputRef}
+									onChange={handleThumbnail}
+								/>
+								<ImageSrc
+									style={{
+										backgroundImage: `url(${pic1})`,
+									}}
+								/>
+								<ImageBackdrop className='MuiImageBackdrop-root' />
+								<Image className='MuiTypo-root'>
+									<Typography
+										variant='h5'
+										color='inherit'
+										sx={{
+											position: 'relative',
+											p: 4,
+											pt: 2,
+											pb: (theme) => `calc(${theme.spacing(1)} + 6px)`,
+										}}
+									>
+										{t('t-upload-pic')}
+										<ImageMarked className='MuiImageMarked-root' />
+									</Typography>
+								</Image>
+							</Button>
 						</Grid>
 					</Grid>
 				</Box>

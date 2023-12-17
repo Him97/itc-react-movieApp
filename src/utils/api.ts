@@ -14,63 +14,70 @@ const getHeaders = () => {
 
 export const GET = async <T>(url: string, params?: AxiosRequestConfig): Promise<T> => {
   try {
-    const resp = await api.get<T>(url, { ...getHeaders(), ...params });
-    return resp.data;
+    const response: AxiosResponse<T> = await api.get<T>(url, { ...getHeaders(), ...params });
+    return response.data;
   } catch (error) {
-    handleError(error);
+    handleError(error as AxiosError);
     throw error;
   }
 };
 
 export const POST = async <T>(url: string, body: unknown): Promise<T> => {
   try {
-    const resp = await api.post<T>(url, body, {  ...getHeaders() });
-    console.log(resp, resp.data);
-    return resp.data;
+    const response:AxiosResponse = await api.post<T>(url, body, {  ...getHeaders() });
+    console.log(response, response.data);
+    return response.data;
   } catch (error) {
-    handleError(error);
+    handleError(error as AxiosError);
     throw error;
   }
 };
 
 export const PUT = async <T>(url: string, body: unknown): Promise<T> => {
   try {
-    const resp = await api.put<T>(url, body, getHeaders());
-    console.log('PUT ERROR', resp.data);
-    return resp.data;
+    const response:AxiosResponse = await api.put<T>(url, body, getHeaders());
+    console.log('PUT ERROR', response.data);
+    return response.data;
   } catch (error) {
-    handleError(error);
+    handleError(error as AxiosError);
     throw error;
   }
 };
 
 export const DELETE = async <T>(url: string): Promise<T> => {
   try {
-    const resp = await api.delete<T>(url);
-    console.log('DELETE ERROR', resp.data);
-    return resp.data;
-  } catch (error:AxiosError<unknown>) {
-    handleError(error);
+    const response:AxiosResponse = await api.delete<T>(url);
+    console.log('DELETE ERROR', response.data);
+    return response.data;
+  } catch (error) {
+    handleError(error as AxiosError);
     throw error;
   }
 };
 
-const handleError = (error: AxiosError<unknown>) => {
+interface ApiError  {
+  message?: string |unknown ;
+  // other properties...
+}
+
+const handleError = (error: AxiosError) => {
   if (typeof error === 'string') {
-    alert('String error', error);
+    alert( error);
   }
   if (error.response) {
     console.log('Status Code:', error.response.status);
     console.log('Response Data:', error.response.data);
     console.log('Response Headers:', error.response.headers);
-    if (error.response.data && error.response.data.message) {
-      alert('Error: ' + error.response.data.message);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const responseData: ApiError|any = error.response.data;
+    if (responseData && responseData.message) {
+      alert('Error: ' + responseData.message);
     } else {
       alert('An error occurred. Please try again.');
     }
   } else if (error.request) {
     alert('No response received');
   } else {
-    alert('error message', error.message);
+    alert(error.message);
   }
 };

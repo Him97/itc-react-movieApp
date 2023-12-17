@@ -19,9 +19,11 @@
 	"t-create-entry": "Create an Entry",
 	"t-logout": "Log Out",
 	"t-search": "Search",
-	"t-need-help": "Need help?",
+	"t-need-help": "Getting Help",
+	"t-need-help-title": "Need help?",
 	"t-need-help-desc": "No worries! Let us know what we can offer! Create an entry to share your needs with the community.",
-	"t-give-help": "Want to contribute?",
+	"t-give-help": "Contributing",
+	"t-give-help-title": "Want to contribute?",
 	"t-give-help-desc": "We're always looking for new ways to help. Don't hesitate to reach out!",
 	"t-profile": "Profile",
 	"t-bio": "Bio",
@@ -30,5 +32,13 @@
 	"t-category": "Category",
 	"t-subcategory": "Sub-category",
 	"t-urgent": "Urgent",
-	"t-submit": "Submit"
+	"t-availability": "Availability",
+	"t-submit": "Submit",
+	"t-entry-for": "Entry for",
+	"t-time": "Time",
+	"t-service": "Service",
+	"t-product": "Product",
+	"t-need": "Need",
+	"t-back": "Return back to the previous page",
+	"t-upload-pic": "Upload a picture"
 }
