@@ -4,6 +4,7 @@ import { useTheme } from '@mui/material/styles';
 import { UserContext, UserContextProps } from '../contexts/User';
 import { useTranslation } from 'react-i18next';
 import { Parallax, ParallaxLayer, IParallax } from '@react-spring/parallax';
+import useSnackbar from '../utils/useSnackbar';
 import Entry from './Entry';
 import home from '../assets/video/bg-home.mp4';
 import foods from '../assets/video/bg-foods.mp4';
@@ -11,6 +12,7 @@ import team from '../assets/video/bg-team.mp4';
 
 export default function Home() {
 	const { t } = useTranslation();
+	const { SnackbarProps } = useSnackbar();
 	const theme = useTheme();
 	const user = React.useContext(UserContext) as UserContextProps;
 	const [loopNum, setLoopNum] = React.useState<number>(0);
@@ -66,11 +68,12 @@ export default function Home() {
 		localStorage.removeItem('USER');
 		console.log(localStorage.getItem('USER'));
 		if (localStorage.getItem('USER') === null) {
+			SnackbarProps(t('t-logout-success'), true);
 			setTimeout(() => {
 				window.location.reload();
 			}, 1000);
 		} else {
-			console.log('error');
+			SnackbarProps(t('t-logout-failed'), false);
 		}
 	};
 

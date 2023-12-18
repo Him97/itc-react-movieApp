@@ -18,11 +18,13 @@ import {
 } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import HandshakeIcon from '@mui/icons-material/Handshake';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import pic from '../assets/images/goods2.jpg';
+import useSnackbar from '../utils/useSnackbar';
 import { useTheme } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import pic from '../assets/images/goods2.jpg';
 
 export default function Signup() {
 	interface Country {
@@ -31,6 +33,7 @@ export default function Signup() {
 	}
 
 	const { t } = useTranslation();
+	const { SnackbarProps } = useSnackbar();
 	const navigate = useNavigate();
 	const theme = useTheme();
 	const [firstname, setFirstname] = React.useState<string>('');
@@ -106,11 +109,12 @@ export default function Signup() {
 		};
 		const data = await POST('/auth/register', body);
 		if (data) {
+			SnackbarProps(t('t-signup-success'), true);
 			setTimeout(async () => {
 				navigate('/login');
 			}, 1000);
 		} else {
-			console.log('error');
+			SnackbarProps(t('t-signup-failed'), false);
 		}
 	};
 
@@ -152,8 +156,33 @@ export default function Signup() {
 						transitionDuration: '1s',
 					}}
 				>
-					<Link href='/login' color='primary.light' underline='none'>
-						Already registered? Log in to your account now!
+					<IconButton size='large' href='/signup'>
+						<HandshakeIcon
+							sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}
+							color='primary'
+						/>
+						<Typography
+							variant='h5'
+							display={{ xs: 'none', md: 'flex' }}
+							color='primary.light'
+							fontFamily='monospace'
+							fontWeight={700}
+							letterSpacing='.3rem'
+							mr={2}
+							sx={{
+								textDecoration: 'none',
+							}}
+						>
+							{t('t-zelaze')}
+						</Typography>
+					</IconButton>
+					<Link
+						href='/login'
+						color='primary.light'
+						underline='none'
+						variant='h6'
+					>
+						{t('t-to-login')}
 					</Link>
 				</Box>
 			</Grid>
@@ -175,7 +204,7 @@ export default function Signup() {
 					{t('t-signup')}
 				</Typography>
 				<Box component='form' noValidate onSubmit={handleSignup}>
-					<FormControl fullWidth variant='outlined' margin='normal'>
+					<FormControl fullWidth variant='outlined' margin='dense'>
 						<InputLabel htmlFor='firstname'>{t('t-firstname')}</InputLabel>
 						<OutlinedInput
 							required
@@ -187,7 +216,7 @@ export default function Signup() {
 							onChange={(event) => setFirstname(event.target.value)}
 						/>
 					</FormControl>
-					<FormControl fullWidth variant='outlined' margin='normal'>
+					<FormControl fullWidth variant='outlined' margin='dense'>
 						<InputLabel htmlFor='lastname'>{t('t-lastname')}</InputLabel>
 						<OutlinedInput
 							required
@@ -199,8 +228,16 @@ export default function Signup() {
 							onChange={(event) => setLastname(event.target.value)}
 						/>
 					</FormControl>
-					<FormControl fullWidth variant='outlined' margin='normal'>
-						<InputLabel htmlFor='email'>{t('t-email')}</InputLabel>
+					<FormControl fullWidth variant='outlined' margin='dense'>
+						<InputLabel
+							htmlFor='email'
+							error={
+								email !== '' &&
+								!/^([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4})$/i.test(email)
+							}
+						>
+							{t('t-email')}
+						</InputLabel>
 						<OutlinedInput
 							required
 							id='email'
@@ -214,14 +251,14 @@ export default function Signup() {
 							value={email}
 							onChange={(event) => setEmail(event.target.value)}
 						/>
-						<FormHelperText>
+						<FormHelperText error>
 							{email !== '' &&
 							!/^([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4})$/i.test(email)
 								? t('t-invalid-email')
 								: ''}
 						</FormHelperText>
 					</FormControl>
-					<FormControl fullWidth variant='outlined' margin='normal'>
+					<FormControl fullWidth variant='outlined' margin='dense'>
 						<InputLabel htmlFor='phone'>{t('t-phone')}</InputLabel>
 						<OutlinedInput
 							required
@@ -257,7 +294,7 @@ export default function Signup() {
 							</option>
 						))}
 					</NativeSelect>
-					<FormControl fullWidth variant='outlined' margin='normal'>
+					<FormControl fullWidth variant='outlined' margin='dense'>
 						<InputLabel htmlFor='password'>{t('t-password')}</InputLabel>
 						<OutlinedInput
 							required
@@ -281,8 +318,11 @@ export default function Signup() {
 							onChange={(event) => setPassword(event.target.value)}
 						/>
 					</FormControl>
-					<FormControl fullWidth variant='outlined' margin='normal'>
-						<InputLabel htmlFor='confirm-password'>
+					<FormControl fullWidth variant='outlined' margin='dense'>
+						<InputLabel
+							htmlFor='confirm-password'
+							error={confirmPassword != '' && password !== confirmPassword}
+						>
 							{t('t-confirm-password')}
 						</InputLabel>
 						<OutlinedInput
@@ -304,6 +344,7 @@ export default function Signup() {
 							}
 							label={t('t-confirm-password')}
 							value={confirmPassword}
+							error={confirmPassword != '' && password !== confirmPassword}
 							onChange={(event) => setConfirmPassword(event.target.value)}
 						/>
 						<FormHelperText error>

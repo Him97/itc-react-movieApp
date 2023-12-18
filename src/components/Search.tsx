@@ -1,19 +1,22 @@
 import * as React from 'react';
-import axios from 'axios';
+import { GET } from '../utils/api';
 import { styled, alpha } from '@mui/material/styles';
 import { useTheme } from '@mui/material/styles';
 import {
 	Backdrop,
 	Box,
+	Card,
+	CardActions,
+	IconButton,
 	InputBase,
-	List,
-	ListItem,
-	ListItemIcon,
-	ListItemText,
 	Modal,
+	Stack,
+	ToggleButton,
+	Typography,
 } from '@mui/material';
+import Masonry from '@mui/lab/Masonry';
 import SearchIcon from '@mui/icons-material/Search';
-import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
+import InfoIcon from '@mui/icons-material/Info';
 import { useTranslation } from 'react-i18next';
 import { useSpring, animated } from '@react-spring/web';
 import { debounce } from 'lodash';
@@ -37,10 +40,12 @@ interface SearchResult {
 	isGivingHelp: boolean;
 	category: string;
 	country: string;
+	region: string;
 	availability: string;
 	title: string;
 	description: string;
 	isUrgent: boolean;
+	image: string;
 }
 
 const Fade = React.forwardRef<HTMLDivElement, FadeProps>(
@@ -92,21 +97,24 @@ export default function Search({ open, handleClose }: SearchProps) {
 		transform: 'translate(-50%, -50%)',
 		bgcolor:
 			theme.palette.mode === 'dark'
-				? 'rgba(0, 0, 0, 0.8)'
-				: 'rgba(255, 255, 255, 0.8)',
+				? 'rgba(0, 0, 0, 0.5)'
+				: 'rgba(255, 255, 255, 0.5)',
+		boxShadow:
+			theme.palette.mode === 'dark'
+				? '0 0 5px 0 rgba(255 ,255 ,255 ,0.5)'
+				: '0 0 5px 0 rgba(0, 0, 0, 0.5)',
 		borderRadius: 1,
-		boxShadow: 24,
 		backdropfilter: 'blur(8px)',
 	};
 
 	const debouncedSearch = debounce(async (term: string) => {
 		try {
-			const response = await axios.get(`/entry?search=${term}`);
-			setSearchResults(response.data);
+			const response: SearchResult[] = await GET(`/entries/search?q=${term}`);
+			setSearchResults(response);
 		} catch (error) {
 			console.error('Error searching:', error);
 		}
-	}, 2000);
+	}, 1000);
 
 	const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { value } = event.target;
@@ -142,20 +150,70 @@ export default function Search({ open, handleClose }: SearchProps) {
 							onChange={handleSearchChange}
 						/>
 					</SearchBar>
-					{searchResults &&
-						searchResults.map((result: SearchResult) => (
-							<List style={{ border: '1px solid black' }}>
-								<ListItem>
-									<ListItemIcon>
-										<VolunteerActivismIcon />
-									</ListItemIcon>
-									<ListItemText
-										primary={result.title}
-										secondary={result.description}
+					<Stack>
+						<ToggleButton value='check'>Urgent</ToggleButton>
+					</Stack>
+					<Masonry columns={3} spacing={2} sx={{ border: '1px solid black' }}>
+						{searchResults.map((entry, index) => (
+							<Card
+								key={index}
+								style={{
+									borderRadius: '5px',
+									boxShadow:
+										theme.palette.mode === 'dark'
+											? '0 0 5px 0 rgba(255 ,255 ,255 ,0.5)'
+											: '0 0 5px 0 rgba(0, 0, 0, 0.5)',
+									backgroundColor: 'transparent',
+									border: '1px solid black',
+								}}
+							>
+								<img
+									srcSet={`${entry.image}?w=162&auto=format&dpr=2 2x`}
+									src={`${entry.image}?w=162&auto=format`}
+									alt={entry.title}
+									width='100%'
+									style={{
+										display: entry.image ? 'block' : 'none',
+										borderRadius: '5px',
+									}}
+								/>
+								<CardActions
+									sx={{
+										display: 'flex',
+										flexDirection: 'column',
+										p: 0,
+										justifyContent: 'space-between',
+										alignItems: 'center',
+										position: 'relative',
+									}}
+								>
+									<img
+										src={entry.image}
+										alt={entry.title}
+										width='100%'
+										height='100%'
+										style={{
+											visibility: entry.image ? 'visible' : 'hidden',
+											position: 'absolute',
+											filter: 'blur(25px)',
+										}}
 									/>
-								</ListItem>
-							</List>
+									<Stack zIndex={1} p={2} width='100%'>
+										<Typography align='left' variant='h5'>
+											{entry.title}
+										</Typography>
+										<Typography align='left'>{entry.category}</Typography>
+										<Typography align='left'>
+											{entry.country + ' ' + entry.region}
+										</Typography>
+									</Stack>
+									<IconButton>
+										<InfoIcon />
+									</IconButton>
+								</CardActions>
+							</Card>
 						))}
+					</Masonry>
 				</Box>
 			</Fade>
 		</Modal>
@@ -170,8 +228,6 @@ const SearchBar = styled('div')(({ theme }) => ({
 	'&:hover': {
 		backgroundColor: alpha(theme.palette.common.white, 0.25),
 	},
-	marginRight: theme.spacing(2),
-	marginLeft: 0,
 	width: '100%',
 	minHeight: '4rem',
 }));

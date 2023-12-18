@@ -270,13 +270,13 @@ export default function Entry({ open, handleClose }: EntryProps) {
 		const body = {
 			isgivinghelp: isGivingHelp,
 			category: category + ' ' + subcategory,
-			country: country,
-			town: region,
+			country,
+			region,
 			title,
 			description,
 			availability,
 			image,
-			urgent: isUrgent,
+			isurgent: isUrgent,
 		};
 		const data = await POST('/entries', body);
 		if (data) {

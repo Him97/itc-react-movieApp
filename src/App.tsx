@@ -12,6 +12,7 @@ import { UserProvider } from './contexts/User';
 import { ColorModeContext } from './contexts/ColorMode';
 import { LocaleProvider } from './contexts/Locale';
 import { useLocale } from './utils/useLocale';
+import { SnackbarProvider } from './contexts/Snackbar';
 
 export default function App() {
 	type ModeType = 'light' | 'dark';
@@ -72,20 +73,22 @@ export default function App() {
 			<ThemeProvider theme={theme}>
 				<LocaleProvider>
 					<UserProvider>
-						<Box
-							component='center'
-							position='relative'
-							display='flex'
-							flexDirection='column'
-							minHeight='100vh'
-							sx={{ filter: open ? 'blur(5px)' : 'none' }}
-						>
-							<CssBaseline />
-							<Navbar colorMode={colorMode} handleOpen={handleOpen} />
-							<Router />
-							<Search open={open} handleClose={handleClose} />
-							<Footer />
-						</Box>
+						<SnackbarProvider>
+							<Box
+								component='center'
+								position='relative'
+								display='flex'
+								flexDirection='column'
+								minHeight='100vh'
+								sx={{ filter: open ? 'blur(5px)' : 'none' }}
+							>
+								<CssBaseline />
+								<Navbar colorMode={colorMode} handleOpen={handleOpen} />
+								<Router />
+								<Search open={open} handleClose={handleClose} />
+								<Footer />
+							</Box>
+						</SnackbarProvider>
 					</UserProvider>
 				</LocaleProvider>
 			</ThemeProvider>

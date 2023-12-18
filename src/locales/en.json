@@ -40,5 +40,15 @@
 	"t-product": "Product",
 	"t-need": "Need",
 	"t-back": "Return back to the previous page",
-	"t-upload-pic": "Upload a picture"
+	"t-upload-pic": "Upload a picture",
+	"t-forgot-password": "Forgot Password?",
+	"t-reset-password": "Reset Password",
+	"t-to-signup": "Do not have an account? Join us now!",
+	"t-to-login": "Already registered? Log in to your account now!",
+	"t-login-success": "Login Successful!",
+	"t-login-failed": "Login Failed!",
+	"t-signup-success": "Signup Successful!",
+	"t-signup-failed": "Signup Failed!",
+	"t-logout-success": "Logged out successfully, See you next time!",
+	"t-logout-failed": "Oops, logged out failed, you are still with us!"
 }

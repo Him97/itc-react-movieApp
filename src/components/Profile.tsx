@@ -146,7 +146,7 @@ export default function Profile() {
 					{t('t-profile')}
 				</Typography>
 				<Box component='form' noValidate onSubmit={handleSignup}>
-					<FormControl fullWidth variant='outlined' margin='normal'>
+					<FormControl fullWidth variant='outlined' margin='dense'>
 						<InputLabel htmlFor='firstname'>{t('t-firstname')}</InputLabel>
 						<OutlinedInput
 							required
@@ -158,7 +158,7 @@ export default function Profile() {
 							onChange={(event) => setFirstname(event.target.value)}
 						/>
 					</FormControl>
-					<FormControl fullWidth variant='outlined' margin='normal'>
+					<FormControl fullWidth variant='outlined' margin='dense'>
 						<InputLabel htmlFor='lastname'>{t('t-lastname')}</InputLabel>
 						<OutlinedInput
 							required
@@ -170,7 +170,7 @@ export default function Profile() {
 							onChange={(event) => setLastname(event.target.value)}
 						/>
 					</FormControl>
-					<FormControl fullWidth variant='outlined' margin='normal'>
+					<FormControl fullWidth variant='outlined' margin='dense'>
 						<InputLabel htmlFor='email'>{t('t-email')}</InputLabel>
 						<OutlinedInput
 							required
@@ -192,7 +192,7 @@ export default function Profile() {
 								: ''}
 						</FormHelperText>
 					</FormControl>
-					<FormControl fullWidth variant='outlined' margin='normal'>
+					<FormControl fullWidth variant='outlined' margin='dense'>
 						<InputLabel htmlFor='phone'>{t('t-phone')}</InputLabel>
 						<OutlinedInput
 							required
@@ -228,7 +228,7 @@ export default function Profile() {
 							</option>
 						))}
 					</NativeSelect>
-					<FormControl fullWidth variant='outlined' margin='normal'>
+					<FormControl fullWidth variant='outlined' margin='dense'>
 						<InputLabel htmlFor='password'>{t('t-password')}</InputLabel>
 						<OutlinedInput
 							required
@@ -252,7 +252,7 @@ export default function Profile() {
 							onChange={(event) => setPassword(event.target.value)}
 						/>
 					</FormControl>
-					<FormControl fullWidth variant='outlined' margin='normal'>
+					<FormControl fullWidth variant='outlined' margin='dense'>
 						<InputLabel htmlFor='bio'>{t('t-bio')}</InputLabel>
 						<OutlinedInput
 							required

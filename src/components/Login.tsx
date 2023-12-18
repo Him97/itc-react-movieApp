@@ -19,17 +19,20 @@ import {
 } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import HandshakeIcon from '@mui/icons-material/Handshake';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import pic from '../assets/images/goods1.jpg';
+import useSnackbar from '../utils/useSnackbar';
 import { useTheme } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import pic from '../assets/images/goods1.jpg';
 
 export default function Login() {
 	interface Token extends AxiosResponse {
 		token: string;
 	}
 	const { t } = useTranslation();
+	const { SnackbarProps } = useSnackbar();
 	const navigate = useNavigate();
 	const theme = useTheme();
 	const [email, setEmail] = React.useState<string>('');
@@ -52,14 +55,15 @@ export default function Login() {
 			localStorage.setItem('USER', JSON.stringify(response));
 			console.log('Token saved in localStorage:', localStorage.getItem('USER'));
 			if (localStorage.getItem('USER')) {
+				SnackbarProps(t('t-login-success'), true);
 				setTimeout(async () => {
 					navigate('/');
 				}, 1000);
 			} else {
-				console.log('something is wrong');
+				SnackbarProps(t('t-login-failed'), false);
 			}
 		} catch (error) {
-			console.error('Full Error Object:', error);
+			SnackbarProps(t('t-login-failed'), false);
 		}
 	};
 
@@ -95,7 +99,15 @@ export default function Login() {
 				</Typography>
 				<Box component='form' noValidate onSubmit={handleLogin}>
 					<FormControl fullWidth variant='outlined' margin='normal'>
-						<InputLabel htmlFor='email'>{t('t-email')}</InputLabel>
+						<InputLabel
+							htmlFor='email'
+							error={
+								email !== '' &&
+								!/^([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4})$/i.test(email)
+							}
+						>
+							{t('t-email')}
+						</InputLabel>
 						<OutlinedInput
 							required
 							id='email'
@@ -157,8 +169,8 @@ export default function Login() {
 					>
 						{t('t-login')}
 					</Button>
-					<Link href='#' variant='body2'>
-						Forgot password?
+					<Link href='/login' variant='body2'>
+						{t('t-forgot-password')}
 					</Link>
 				</Box>
 			</Grid>
@@ -186,8 +198,33 @@ export default function Login() {
 						transitionDuration: '1s',
 					}}
 				>
-					<Link href='/signup' color='primary.light' underline='none'>
-						Do not have an account? Join us now!
+					<IconButton size='large' href='/signup'>
+						<HandshakeIcon
+							sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}
+							color='primary'
+						/>
+						<Typography
+							variant='h5'
+							display={{ xs: 'none', md: 'flex' }}
+							color='primary.light'
+							fontFamily='monospace'
+							fontWeight={700}
+							letterSpacing='.3rem'
+							mr={2}
+							sx={{
+								textDecoration: 'none',
+							}}
+						>
+							{t('t-zelaze')}
+						</Typography>
+					</IconButton>
+					<Link
+						href='/signup'
+						color='primary.light'
+						underline='none'
+						variant='h6'
+					>
+						{t('t-to-signup')}
 					</Link>
 				</Box>
 			</Grid>
