@@ -7,7 +7,7 @@ import { LocaleProvider } from './contexts/Locale.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>
-		<BrowserRouter basename='/zelaze-frontend'>
+		<BrowserRouter basename='/zelaze'>
 			<LocaleProvider>
 				<App />
 			</LocaleProvider>
