@@ -116,5 +116,6 @@
 	"t-elderly": "Support for Elderly",
 	"t-companion": "Companionship Visit",
 	"t-errand": "Assistance with Errands",
-	"t-household": "household Chores"
+	"t-household": "household Chores",
+	"t-message-placeholder": "Type your message to the entry poster here..."
 }

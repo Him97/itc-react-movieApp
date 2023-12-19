@@ -98,7 +98,7 @@ export default function Search({ open, handleClose }: ModalProps) {
 		top: '50%',
 		left: '50%',
 		minWidth: '50%',
-		height: 'auto',
+		minHeight: '6.5rem',
 		transform: 'translate(-50%, -50%)',
 		bgcolor:
 			theme.palette.mode === 'dark'
@@ -258,7 +258,7 @@ export default function Search({ open, handleClose }: ModalProps) {
 							color='primary'
 							onChange={handleFilterChange}
 							defaultValue=''
-							style={{ minWidth: '20%' }}
+							style={{ minWidth: '20%', maxWidth: '25%' }}
 							IconComponent={CategoryIcon}
 						>
 							<option disabled value=''>
@@ -272,14 +272,17 @@ export default function Search({ open, handleClose }: ModalProps) {
 						</NativeSelect>
 						{filters.category && (
 							<NativeSelect
-								id='sub-category'
-								name='sub-category'
-								title='sub-category'
-								aria-label='sub-category'
+								id='subcategory'
+								name='subcategory'
+								title='subcategory'
+								aria-label='subcategory'
 								color='primary'
 								onChange={handleFilterChange}
 								defaultValue=''
-								style={{ minWidth: '20%' }}
+								style={{
+									minWidth: '20%',
+									maxWidth: '25%',
+								}}
 								IconComponent={ClassIcon}
 							>
 								<option disabled value=''>
@@ -303,7 +306,7 @@ export default function Search({ open, handleClose }: ModalProps) {
 							color='primary'
 							onChange={handleFilterChange}
 							defaultValue=''
-							style={{ minWidth: '20%' }}
+							style={{ minWidth: '20%', maxWidth: '25%' }}
 							IconComponent={ExploreIcon}
 						>
 							<option disabled value=''>
@@ -324,7 +327,10 @@ export default function Search({ open, handleClose }: ModalProps) {
 								color='primary'
 								onChange={handleFilterChange}
 								defaultValue=''
-								style={{ minWidth: '20%' }}
+								style={{
+									minWidth: '20%',
+									maxWidth: '25%',
+								}}
 								IconComponent={LocationCityIcon}
 							>
 								<option disabled value=''>

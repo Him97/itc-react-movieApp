@@ -312,10 +312,10 @@ export default function Entry({ open, handleClose }: ModalProps) {
 									))}
 								</NativeSelect>
 								<NativeSelect
-									id='sub-category'
-									name='sub-category'
-									title='sub-category'
-									aria-label='sub-category'
+									id='subcategory'
+									name='subcategory'
+									title='subcategory'
+									aria-label='subcategory'
 									color='primary'
 									onChange={handleChange}
 									defaultValue=''
