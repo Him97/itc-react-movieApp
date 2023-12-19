@@ -20,6 +20,7 @@ export default function App() {
 	const { language } = useLocale();
 	const [open, setOpen] = React.useState<boolean>(false);
 
+	console.log(localStorage.getItem('language'));
 	const colorMode = React.useMemo(
 		() => ({
 			toggleColorMode: () => {

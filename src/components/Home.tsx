@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Box, Button, ButtonGroup, Grid, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { UserContext, UserContextProps } from '../contexts/User';
+import { UserContext } from '../contexts/User';
 import { useTranslation } from 'react-i18next';
 import { Parallax, ParallaxLayer, IParallax } from '@react-spring/parallax';
 import useSnackbar from '../utils/useSnackbar';
@@ -9,12 +9,13 @@ import Entry from './Entry';
 import home from '../assets/video/bg-home.mp4';
 import foods from '../assets/video/bg-foods.mp4';
 import team from '../assets/video/bg-team.mp4';
+import { UserObj } from './types';
 
 export default function Home() {
 	const { t } = useTranslation();
 	const { SnackbarProps } = useSnackbar();
 	const theme = useTheme();
-	const user = React.useContext(UserContext) as UserContextProps;
+	const user = React.useContext(UserContext) as UserObj;
 	const [loopNum, setLoopNum] = React.useState<number>(0);
 	const [isDeleting, setIsDeleting] = React.useState<boolean>(false);
 	const [text, setText] = React.useState<string>('');

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import axios from 'axios';
 import { GET } from '../utils/api';
 import { styled, alpha } from '@mui/material/styles';
 import { useTheme } from '@mui/material/styles';
@@ -7,46 +8,36 @@ import {
 	Box,
 	Card,
 	CardActions,
+	Checkbox,
+	FormControlLabel,
+	Grid,
 	IconButton,
 	InputBase,
 	Modal,
+	NativeSelect,
 	Stack,
-	ToggleButton,
 	Typography,
 } from '@mui/material';
-import Masonry from '@mui/lab/Masonry';
 import SearchIcon from '@mui/icons-material/Search';
 import InfoIcon from '@mui/icons-material/Info';
+import CategoryIcon from '@mui/icons-material/Category';
+import ClassIcon from '@mui/icons-material/Class';
+import ExploreIcon from '@mui/icons-material/Explore';
+import LocationCityIcon from '@mui/icons-material/LocationCity';
+import QuickreplyOutlinedIcon from '@mui/icons-material/QuickreplyOutlined';
+import QuickreplyIcon from '@mui/icons-material/Quickreply';
+import useSnackbar from '../utils/useSnackbar';
 import { useTranslation } from 'react-i18next';
 import { useSpring, animated } from '@react-spring/web';
 import { debounce } from 'lodash';
-
-interface FadeProps {
-	children: React.ReactElement;
-	in?: boolean;
-	onClick?: unknown;
-	onEnter?: (node: HTMLElement, isAppearing: boolean) => void;
-	onExited?: (node: HTMLElement, isAppearing: boolean) => void;
-	ownerState?: unknown;
-}
-
-interface SearchProps {
-	open: boolean;
-	handleClose: () => void;
-}
-
-interface SearchResult {
-	id: number;
-	isGivingHelp: boolean;
-	category: string;
-	country: string;
-	region: string;
-	availability: string;
-	title: string;
-	description: string;
-	isUrgent: boolean;
-	image: string;
-}
+import Categories from '../assets/Categories';
+import {
+	CountryObj,
+	EntryObj,
+	FadeProps,
+	ModalProps,
+	SubcategoryObj,
+} from './types';
 
 const Fade = React.forwardRef<HTMLDivElement, FadeProps>(
 	function Fade(props, ref) {
@@ -83,17 +74,29 @@ const Fade = React.forwardRef<HTMLDivElement, FadeProps>(
 	}
 );
 
-export default function Search({ open, handleClose }: SearchProps) {
+export default function Search({ open, handleClose }: ModalProps) {
 	const { t } = useTranslation();
+	const { SnackbarProps } = useSnackbar();
 	const theme = useTheme();
-	const [searchResults, setSearchResults] = React.useState<SearchResult[]>([]);
+	const categories = Categories();
+	const [countries, setCountries] = React.useState<CountryObj[]>([]);
+	const [regions, setRegions] = React.useState<Array<string>>([]);
+	const [searchResults, setSearchResults] = React.useState<EntryObj[]>([]);
 	const [searchTerm, setSearchTerm] = React.useState<string>('');
+	const [filters, setFilters] = React.useState<EntryObj>({
+		category: '',
+		subcategory: '',
+		country: '',
+		region: '',
+		isurgent: false,
+	});
 
 	const style = {
 		position: 'absolute',
 		top: '50%',
 		left: '50%',
 		minWidth: '50%',
+		height: 'auto',
 		transform: 'translate(-50%, -50%)',
 		bgcolor:
 			theme.palette.mode === 'dark'
@@ -107,19 +110,92 @@ export default function Search({ open, handleClose }: SearchProps) {
 		backdropfilter: 'blur(8px)',
 	};
 
-	const debouncedSearch = debounce(async (term: string) => {
+	const subcategories: SubcategoryObj[] = React.useMemo(() => {
+		const selectedCategoryObj = categories.find(
+			(categoryObj) => categoryObj.category === filters.category
+		);
+		return selectedCategoryObj
+			? selectedCategoryObj.subcategories.map((subcategory) => ({
+					category: filters.category,
+					subcategory,
+					// eslint-disable-next-line no-mixed-spaces-and-tabs
+			  }))
+			: [];
+	}, [filters.category, categories]);
+
+	React.useEffect(() => {
+		const getCountries = async () => {
+			try {
+				const response = await axios.get(
+					'https://countriesnow.space/api/v0.1/countries/positions'
+				);
+				const data = await response.data;
+				if (data.error === false) {
+					setCountries(data.data);
+				}
+			} catch (error) {
+				console.log(error);
+			}
+		};
+		getCountries();
+	}, []);
+
+	React.useEffect(() => {
+		console.log(filters.country);
+		const getRegions = async () => {
+			if (filters.country !== '') {
+				try {
+					const response = await axios.post(
+						`https://countriesnow.space/api/v0.1/countries/cities`,
+						{ country: filters.country }
+					);
+					const data = await response.data;
+					console.log(data);
+					if (data.error === false) {
+						setRegions(data.data);
+					}
+				} catch (error) {
+					console.log(error);
+				}
+			}
+		};
+		getRegions();
+	}, [filters.country]);
+
+	const debouncedSearch = debounce(async () => {
 		try {
-			const response: SearchResult[] = await GET(`/entries/search?q=${term}`);
+			const queryParameters = {
+				q: searchTerm,
+				...filters,
+			};
+			const queryParamsString = Object.entries(queryParameters)
+				.filter(([, value]) => value !== '')
+				.map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+				.join('&');
+			console.log(queryParamsString);
+			const response: EntryObj[] = await GET(
+				`/entries/search?${queryParamsString}`
+			);
+			console.log(response);
 			setSearchResults(response);
 		} catch (error) {
-			console.error('Error searching:', error);
+			SnackbarProps(error as string, false);
 		}
 	}, 1000);
+
+	const handleFilterChange = (
+		event: React.ChangeEvent<{ name?: string; value: unknown }>
+	) => {
+		setFilters({
+			...filters,
+			[event.target.name as string]: event.target.value as string,
+		});
+	};
 
 	const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { value } = event.target;
 		setSearchTerm(value);
-		debouncedSearch(value);
+		debouncedSearch();
 	};
 
 	return (
@@ -128,7 +204,12 @@ export default function Search({ open, handleClose }: SearchProps) {
 			aria-labelledby='search'
 			aria-describedby='search'
 			open={open}
-			onClose={handleClose}
+			onClose={() => {
+				handleClose();
+				setSearchTerm('');
+				setSearchResults([]);
+				setFilters({} as EntryObj);
+			}}
 			closeAfterTransition
 			slots={{ backdrop: Backdrop }}
 			slotProps={{
@@ -150,70 +231,178 @@ export default function Search({ open, handleClose }: SearchProps) {
 							onChange={handleSearchChange}
 						/>
 					</SearchBar>
-					<Stack>
-						<ToggleButton value='check'>Urgent</ToggleButton>
-					</Stack>
-					<Masonry columns={3} spacing={2} sx={{ border: '1px solid black' }}>
-						{searchResults.map((entry, index) => (
-							<Card
-								key={index}
-								style={{
-									borderRadius: '5px',
-									boxShadow:
-										theme.palette.mode === 'dark'
-											? '0 0 5px 0 rgba(255 ,255 ,255 ,0.5)'
-											: '0 0 5px 0 rgba(0, 0, 0, 0.5)',
-									backgroundColor: 'transparent',
-									border: '1px solid black',
-								}}
-							>
-								<img
-									srcSet={`${entry.image}?w=162&auto=format&dpr=2 2x`}
-									src={`${entry.image}?w=162&auto=format`}
-									alt={entry.title}
-									width='100%'
-									style={{
-										display: entry.image ? 'block' : 'none',
-										borderRadius: '5px',
-									}}
+					<Stack direction='row' component='form' justifyContent='center'>
+						<FormControlLabel
+							value='start'
+							control={
+								<Checkbox
+									icon={<QuickreplyOutlinedIcon />}
+									checkedIcon={<QuickreplyIcon />}
 								/>
-								<CardActions
-									sx={{
-										display: 'flex',
-										flexDirection: 'column',
-										p: 0,
-										justifyContent: 'space-between',
-										alignItems: 'center',
-										position: 'relative',
+							}
+							label={t('t-urgent')}
+							labelPlacement='start'
+							style={{
+								minWidth: '20%',
+								justifyContent: 'space-evenly',
+							}}
+						/>
+
+						<NativeSelect
+							id='category'
+							name='category'
+							title='category'
+							aria-label='category'
+							color='primary'
+							onChange={handleFilterChange}
+							defaultValue=''
+							style={{ minWidth: '20%' }}
+							IconComponent={CategoryIcon}
+						>
+							<option disabled value=''>
+								{t('t-category')}
+							</option>
+							{categories.map((categoryObj) => (
+								<option key={categoryObj.category} value={categoryObj.category}>
+									{categoryObj.category}
+								</option>
+							))}
+						</NativeSelect>
+						{filters.category && (
+							<NativeSelect
+								id='sub-category'
+								name='sub-category'
+								title='sub-category'
+								aria-label='sub-category'
+								color='primary'
+								onChange={handleFilterChange}
+								defaultValue=''
+								style={{ minWidth: '20%' }}
+								IconComponent={ClassIcon}
+							>
+								<option disabled value=''>
+									{t('t-subcategory')}
+								</option>
+								{subcategories.map((subcategoryObj) => (
+									<option
+										key={subcategoryObj.subcategory}
+										value={subcategoryObj.subcategory}
+									>
+										{subcategoryObj.subcategory}
+									</option>
+								))}
+							</NativeSelect>
+						)}
+						<NativeSelect
+							id='country'
+							name='country'
+							title='country'
+							aria-label='country'
+							color='primary'
+							onChange={handleFilterChange}
+							defaultValue=''
+							style={{ minWidth: '20%' }}
+							IconComponent={ExploreIcon}
+						>
+							<option disabled value=''>
+								{t('t-country')}
+							</option>
+							{countries.map((item: CountryObj) => (
+								<option key={item.iso2} value={item.name}>
+									{item.name}
+								</option>
+							))}
+						</NativeSelect>
+						{filters.country && (
+							<NativeSelect
+								id='region'
+								name='region'
+								title='region'
+								aria-label='region'
+								color='primary'
+								onChange={handleFilterChange}
+								defaultValue=''
+								style={{ minWidth: '20%' }}
+								IconComponent={LocationCityIcon}
+							>
+								<option disabled value=''>
+									{t('t-region')}
+								</option>
+								{regions.map((item: string) => (
+									<option key={item} value={item}>
+										{item}
+									</option>
+								))}
+							</NativeSelect>
+						)}
+					</Stack>
+					<Grid
+						container
+						spacing={{ xs: 2, md: 3 }}
+						columns={{ xs: 4, sm: 8, md: 12 }}
+						justifyContent='space-evenly'
+					>
+						{searchResults.map((entry) => (
+							<Grid item>
+								<Card
+									key={entry.id}
+									style={{
+										borderRadius: '5px',
+										boxShadow:
+											theme.palette.mode === 'dark'
+												? '0 0 5px 0 rgba(255 ,255 ,255 ,0.5)'
+												: '0 0 5px 0 rgba(0, 0, 0, 0.5)',
+										backgroundColor: 'transparent',
 									}}
 								>
 									<img
-										src={entry.image}
+										srcSet={`${entry.image}?w=162&auto=format&dpr=2 2x`}
+										src={`${entry.image}?w=162&auto=format`}
 										alt={entry.title}
 										width='100%'
-										height='100%'
 										style={{
-											visibility: entry.image ? 'visible' : 'hidden',
-											position: 'absolute',
-											filter: 'blur(25px)',
+											display: entry.image ? 'block' : 'none',
+											borderRadius: '5px',
 										}}
 									/>
-									<Stack zIndex={1} p={2} width='100%'>
-										<Typography align='left' variant='h5'>
-											{entry.title}
-										</Typography>
-										<Typography align='left'>{entry.category}</Typography>
-										<Typography align='left'>
-											{entry.country + ' ' + entry.region}
-										</Typography>
-									</Stack>
-									<IconButton>
-										<InfoIcon />
-									</IconButton>
-								</CardActions>
-							</Card>
+									<CardActions
+										sx={{
+											display: 'flex',
+											flexDirection: 'column',
+											p: 0,
+											justifyContent: 'space-between',
+											alignItems: 'center',
+											position: 'relative',
+										}}
+									>
+										<img
+											src={entry.image}
+											alt={entry.title}
+											width='100%'
+											height='100%'
+											style={{
+												visibility: entry.image ? 'visible' : 'hidden',
+												position: 'absolute',
+												filter: 'blur(25px)',
+											}}
+										/>
+										<Stack zIndex={1} p={2} width='100%'>
+											<Typography align='left' variant='h5'>
+												{entry.title}
+											</Typography>
+											<Typography align='left'>{entry.category}</Typography>
+											<Typography align='left'>
+												{entry.country + ' ' + entry.region}
+											</Typography>
+										</Stack>
+										<IconButton href={`/entry/${entry.id}`}>
+											<InfoIcon />
+										</IconButton>
+									</CardActions>
+								</Card>
+							</Grid>
 						))}
-					</Masonry>
+					</Grid>
 				</Box>
 			</Fade>
 		</Modal>
@@ -228,6 +417,7 @@ const SearchBar = styled('div')(({ theme }) => ({
 	'&:hover': {
 		backgroundColor: alpha(theme.palette.common.white, 0.25),
 	},
+	transitionDuration: '1s',
 	width: '100%',
 	minHeight: '4rem',
 }));

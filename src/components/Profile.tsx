@@ -22,13 +22,9 @@ import { useTranslation } from 'react-i18next';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Entry from './Entry';
 import pic from '../assets/images/goods2.jpg';
+import { CountryObj } from './types';
 
 export default function Profile() {
-	interface Country {
-		name: string;
-		iso2: string;
-	}
-
 	const { t } = useTranslation();
 	const navigate = useNavigate();
 	const theme = useTheme();
@@ -39,7 +35,7 @@ export default function Profile() {
 	const [password, setPassword] = React.useState<string>('');
 	const [showPassword, setShowPassword] = React.useState<boolean>(false);
 	const [bio, setBio] = React.useState<string>('');
-	const [countries, setCountries] = React.useState<Country[]>([]);
+	const [countries, setCountries] = React.useState<CountryObj[]>([]);
 	const [country, setCountry] = React.useState<string>('');
 	const [regions, setRegions] = React.useState<Array<string>>([]);
 	const [region, setRegion] = React.useState<string>('');
@@ -210,7 +206,7 @@ export default function Profile() {
 						placeholder={t('t-country')}
 					>
 						<option disabled>{t('t-country')}</option>
-						{countries.map((item: Country) => (
+						{countries.map((item: CountryObj) => (
 							<option key={item.iso2} value={item.name}>
 								{item.name}
 							</option>

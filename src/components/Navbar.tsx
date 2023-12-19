@@ -34,7 +34,7 @@ interface NavbarProps {
 }
 
 export default function Navbar({ colorMode, handleOpen }: NavbarProps) {
-	const { setLanguage } = useLocale();
+	const { language, setLanguage } = useLocale();
 	const { t } = useTranslation();
 	const theme = useTheme();
 
@@ -200,8 +200,11 @@ export default function Navbar({ colorMode, handleOpen }: NavbarProps) {
 							aria-label='language'
 							onChange={chooseLanguage}
 							color='primary'
+							defaultValue={language || ''}
 						>
-							<option disabled>{t('t-select-lang')}</option>
+							<option disabled value=''>
+								{t('t-select-lang')}
+							</option>
 							<option value={'en'}>English</option>
 							<option value={'fr'}>Français</option>
 							<option value={'sw'}>Kiswahili</option>

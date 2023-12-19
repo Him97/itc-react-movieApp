@@ -25,28 +25,26 @@ import useSnackbar from '../utils/useSnackbar';
 import { useTheme } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { UserObj, CountryObj } from './types';
 
 export default function Signup() {
-	interface Country {
-		name: string;
-		iso2: string;
-	}
-
 	const { t } = useTranslation();
 	const { SnackbarProps } = useSnackbar();
 	const navigate = useNavigate();
 	const theme = useTheme();
-	const [firstname, setFirstname] = React.useState<string>('');
-	const [lastname, setLastname] = React.useState<string>('');
-	const [email, setEmail] = React.useState<string>('');
-	const [phone, setPhone] = React.useState<string>('');
-	const [password, setPassword] = React.useState<string>('');
+	const [formData, setFormData] = React.useState<UserObj>({
+		firstname: '',
+		lastname: '',
+		email: '',
+		phone: '',
+		password: '',
+		country: '',
+		region: '',
+	});
 	const [confirmPassword, setConfirmPassword] = React.useState<string>('');
 	const [showPassword, setShowPassword] = React.useState<boolean>(false);
-	const [countries, setCountries] = React.useState<Country[]>([]);
-	const [country, setCountry] = React.useState<string>('');
+	const [countries, setCountries] = React.useState<CountryObj[]>([]);
 	const [regions, setRegions] = React.useState<Array<string>>([]);
-	const [region, setRegion] = React.useState<string>('');
 
 	React.useEffect(() => {
 		const getCountries = async () => {
@@ -67,11 +65,11 @@ export default function Signup() {
 
 	React.useEffect(() => {
 		const getRegions = async () => {
-			if (country !== '') {
+			if (formData.country !== '') {
 				try {
 					const response = await axios.post(
 						`https://countriesnow.space/api/v0.1/countries/cities`,
-						{ country: country }
+						{ country: formData.country }
 					);
 					const data = await response.data;
 					console.log(data);
@@ -84,7 +82,7 @@ export default function Signup() {
 			}
 		};
 		getRegions();
-	}, [country]);
+	}, [formData.country]);
 
 	const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -94,16 +92,25 @@ export default function Signup() {
 		event.preventDefault();
 	};
 
+	const handleChange = (
+		event: React.ChangeEvent<{ name?: string; value: unknown }>
+	) => {
+		setFormData({
+			...formData,
+			[event.target.name as string]: event.target.value as string,
+		});
+	};
+
 	const handleSignup = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		const body = {
-			firstname,
-			lastname,
-			email,
-			phone,
-			country,
-			region,
-			password,
+			firstname: formData.firstname,
+			lastname: formData.lastname,
+			email: formData.email,
+			phone: formData.phone,
+			password: formData.password,
+			country: formData.country,
+			region: formData.region,
 			bio: '',
 			admin: false,
 		};
@@ -212,8 +219,8 @@ export default function Signup() {
 							name='firstname'
 							type='firstname'
 							label={t('t-firstname')}
-							value={firstname}
-							onChange={(event) => setFirstname(event.target.value)}
+							value={formData.firstname}
+							onChange={handleChange}
 						/>
 					</FormControl>
 					<FormControl fullWidth variant='outlined' margin='dense'>
@@ -224,16 +231,18 @@ export default function Signup() {
 							name='lastname'
 							type='lastname'
 							label={t('t-lastname')}
-							value={lastname}
-							onChange={(event) => setLastname(event.target.value)}
+							value={formData.lastname}
+							onChange={handleChange}
 						/>
 					</FormControl>
 					<FormControl fullWidth variant='outlined' margin='dense'>
 						<InputLabel
 							htmlFor='email'
 							error={
-								email !== '' &&
-								!/^([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4})$/i.test(email)
+								formData.email !== '' &&
+								!/^([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4})$/i.test(
+									formData.email
+								)
 							}
 						>
 							{t('t-email')}
@@ -245,15 +254,19 @@ export default function Signup() {
 							type='email'
 							label={t('t-email')}
 							error={
-								email !== '' &&
-								!/^([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4})$/i.test(email)
+								formData.email !== '' &&
+								!/^([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4})$/i.test(
+									formData.email
+								)
 							}
-							value={email}
-							onChange={(event) => setEmail(event.target.value)}
+							value={formData.email}
+							onChange={handleChange}
 						/>
 						<FormHelperText error>
-							{email !== '' &&
-							!/^([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4})$/i.test(email)
+							{formData.email !== '' &&
+							!/^([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4})$/i.test(
+								formData.email
+							)
 								? t('t-invalid-email')
 								: ''}
 						</FormHelperText>
@@ -266,28 +279,24 @@ export default function Signup() {
 							name='phone'
 							type='phone'
 							label={t('t-phone')}
-							value={phone}
-							onChange={(event) => setPhone(event.target.value)}
+							value={formData.phone}
+							onChange={handleChange}
 						/>
 					</FormControl>
-					<NativeSelect
-						fullWidth
-						onChange={(event) => setCountry(event.target.value)}
-						placeholder={t('t-country')}
-					>
-						<option disabled>{t('t-country')}</option>
-						{countries.map((item: Country) => (
+					<NativeSelect fullWidth onChange={handleChange} defaultValue=''>
+						<option disabled value=''>
+							{t('t-country')}
+						</option>
+						{countries.map((item: CountryObj) => (
 							<option key={item.iso2} value={item.name}>
 								{item.name}
 							</option>
 						))}
 					</NativeSelect>
-					<NativeSelect
-						fullWidth
-						onChange={(event) => setRegion(event.target.value)}
-						placeholder={t('t-region')}
-					>
-						<option disabled>{t('t-region')}</option>
+					<NativeSelect fullWidth onChange={handleChange} defaultValue=''>
+						<option disabled value=''>
+							{t('t-region')}
+						</option>
 						{regions.map((item: string) => (
 							<option key={item} value={item}>
 								{item}
@@ -314,14 +323,16 @@ export default function Signup() {
 								</InputAdornment>
 							}
 							label={t('t-password')}
-							value={password}
-							onChange={(event) => setPassword(event.target.value)}
+							value={formData.password}
+							onChange={handleChange}
 						/>
 					</FormControl>
 					<FormControl fullWidth variant='outlined' margin='dense'>
 						<InputLabel
 							htmlFor='confirm-password'
-							error={confirmPassword != '' && password !== confirmPassword}
+							error={
+								confirmPassword != '' && formData.password !== confirmPassword
+							}
 						>
 							{t('t-confirm-password')}
 						</InputLabel>
@@ -344,11 +355,13 @@ export default function Signup() {
 							}
 							label={t('t-confirm-password')}
 							value={confirmPassword}
-							error={confirmPassword != '' && password !== confirmPassword}
+							error={
+								confirmPassword != '' && formData.password !== confirmPassword
+							}
 							onChange={(event) => setConfirmPassword(event.target.value)}
 						/>
 						<FormHelperText error>
-							{confirmPassword != '' && password !== confirmPassword
+							{confirmPassword != '' && formData.password !== confirmPassword
 								? t('t-password-mismatch')
 								: null}
 						</FormHelperText>
@@ -359,12 +372,14 @@ export default function Signup() {
 						variant='outlined'
 						sx={{ mt: 3, mb: 2 }}
 						disabled={
-							password !== confirmPassword ||
-							firstname === '' ||
-							lastname === '' ||
-							email === '' ||
-							!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email) ||
-							password === '' ||
+							formData.password !== confirmPassword ||
+							formData.firstname === '' ||
+							formData.lastname === '' ||
+							formData.email === '' ||
+							!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(
+								formData.email
+							) ||
+							formData.password === '' ||
 							confirmPassword === ''
 						}
 					>
