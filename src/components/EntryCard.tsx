@@ -138,7 +138,10 @@ export default function EntryCard() {
 								theme.palette.mode === 'dark'
 									? '0 0 5px 0 rgba(255 ,255 ,255 ,0.5)'
 									: '0 0 5px 0 rgba(0, 0, 0, 0.5)',
-							backgroundColor: 'transparent',
+							backgroundColor:
+								theme.palette.mode === 'dark'
+									? 'rgba(0, 0, 0, 0.7)'
+									: 'rgba(255, 255, 255, 0.7)',
 						}}
 					>
 						{entry?.image && (

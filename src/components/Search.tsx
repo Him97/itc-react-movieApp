@@ -1,6 +1,7 @@
 import * as React from 'react';
 import axios from 'axios';
 import { GET } from '../utils/api';
+import { useNavigate } from 'react-router-dom';
 import { styled, alpha } from '@mui/material/styles';
 import { useTheme } from '@mui/material/styles';
 import {
@@ -77,6 +78,7 @@ const Fade = React.forwardRef<HTMLDivElement, FadeProps>(
 export default function Search({ open, handleClose }: ModalProps) {
 	const { t } = useTranslation();
 	const { SnackbarProps } = useSnackbar();
+	const navigate = useNavigate();
 	const theme = useTheme();
 	const categories = Categories();
 	const [countries, setCountries] = React.useState<CountryObj[]>([]);
@@ -395,7 +397,7 @@ export default function Search({ open, handleClose }: ModalProps) {
 												{entry.country + ' ' + entry.region}
 											</Typography>
 										</Stack>
-										<IconButton href={`/entry/${entry.id}`}>
+										<IconButton onClick={() => navigate(`/entry/${entry.id}`)}>
 											<InfoIcon />
 										</IconButton>
 									</CardActions>

@@ -5,6 +5,7 @@ import {
 	Avatar,
 	Box,
 	Button,
+	ButtonBase,
 	Checkbox,
 	FormControl,
 	FormControlLabel,
@@ -13,7 +14,6 @@ import {
 	IconButton,
 	InputAdornment,
 	InputLabel,
-	Link,
 	OutlinedInput,
 	Typography,
 } from '@mui/material';
@@ -169,9 +169,9 @@ export default function Login() {
 					>
 						{t('t-login')}
 					</Button>
-					<Link href='/login' variant='body2'>
+					<Button variant='text' onClick={() => navigate('/login')}>
 						{t('t-forgot-password')}
-					</Link>
+					</Button>
 				</Box>
 			</Grid>
 			<Grid
@@ -198,7 +198,7 @@ export default function Login() {
 						transitionDuration: '1s',
 					}}
 				>
-					<IconButton size='large' href='/signup'>
+					<IconButton size='large' onClick={() => navigate('/signup')}>
 						<HandshakeIcon
 							sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}
 							color='primary'
@@ -218,14 +218,16 @@ export default function Login() {
 							{t('t-zelaze')}
 						</Typography>
 					</IconButton>
-					<Link
-						href='/signup'
-						color='primary.light'
-						underline='none'
-						variant='h6'
+					<ButtonBase
+						style={{
+							fontSize: 20,
+							color: 'white',
+							fontFamily: 'Karla',
+						}}
+						onClick={() => navigate('/signup')}
 					>
 						{t('t-to-signup')}
-					</Link>
+					</ButtonBase>
 				</Box>
 			</Grid>
 		</Grid>

@@ -5,13 +5,13 @@ import {
 	Avatar,
 	Box,
 	Button,
+	ButtonBase,
 	FormControl,
 	FormHelperText,
 	Grid,
 	IconButton,
 	InputAdornment,
 	InputLabel,
-	Link,
 	NativeSelect,
 	OutlinedInput,
 	Typography,
@@ -163,7 +163,7 @@ export default function Signup() {
 						transitionDuration: '1s',
 					}}
 				>
-					<IconButton size='large' href='/signup'>
+					<IconButton size='large' onClick={() => navigate('/login')}>
 						<HandshakeIcon
 							sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}
 							color='primary'
@@ -183,14 +183,16 @@ export default function Signup() {
 							{t('t-zelaze')}
 						</Typography>
 					</IconButton>
-					<Link
-						href='/login'
-						color='primary.light'
-						underline='none'
-						variant='h6'
+					<ButtonBase
+						style={{
+							fontSize: 20,
+							color: 'white',
+							fontFamily: 'Karla',
+						}}
+						onClick={() => navigate('/login')}
 					>
 						{t('t-to-login')}
-					</Link>
+					</ButtonBase>
 				</Box>
 			</Grid>
 			<Grid

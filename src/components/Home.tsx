@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Box, Button, ButtonGroup, Grid, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { UserContext } from '../contexts/User';
@@ -14,6 +15,7 @@ import { UserObj } from './types';
 export default function Home() {
 	const { t } = useTranslation();
 	const { SnackbarProps } = useSnackbar();
+	const navigate = useNavigate();
 	const theme = useTheme();
 	const user = React.useContext(UserContext) as UserObj;
 	const [loopNum, setLoopNum] = React.useState<number>(0);
@@ -169,7 +171,7 @@ export default function Home() {
 											variant='outlined'
 											size='large'
 											color='inherit'
-											href='/signup'
+											onClick={() => navigate('/signup')}
 										>
 											{t('t-signup')}
 										</Button>
@@ -177,14 +179,13 @@ export default function Home() {
 											variant='outlined'
 											size='large'
 											color='inherit'
-											href='/login'
+											onClick={() => navigate('/login')}
 										>
 											{t('t-login')}
 										</Button>
 									</ButtonGroup>
 								) : (
 									<ButtonGroup>
-										<Entry open={createEntry} handleClose={handleCloseEntry} />
 										<Button
 											variant='outlined'
 											size='large'
@@ -203,6 +204,7 @@ export default function Home() {
 										</Button>
 									</ButtonGroup>
 								)}
+								<Entry open={createEntry} handleClose={handleCloseEntry} />
 							</Grid>
 							<Grid
 								item
