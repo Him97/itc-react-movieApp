@@ -35,6 +35,7 @@ export default function Signup() {
 	const [formData, setFormData] = React.useState<UserObj>({
 		firstname: '',
 		lastname: '',
+		bio:'',
 		email: '',
 		phone: '',
 		password: '',
@@ -45,6 +46,7 @@ export default function Signup() {
 	const [showPassword, setShowPassword] = React.useState<boolean>(false);
 	const [countries, setCountries] = React.useState<CountryObj[]>([]);
 	const [regions, setRegions] = React.useState<Array<string>>([]);
+	const [bio, setBio] = React.useState<Array<string>>([]);
 
 	React.useEffect(() => {
 		const getCountries = async () => {
@@ -111,7 +113,7 @@ export default function Signup() {
 			password: formData.password,
 			country: formData.country,
 			region: formData.region,
-			bio: '',
+			bio: formData.bio,
 			admin: false,
 		};
 		const data = await POST('/auth/register', body);
@@ -237,6 +239,20 @@ export default function Signup() {
 							onChange={handleChange}
 						/>
 					</FormControl>
+
+					<FormControl fullWidth variant='outlined' margin='dense'>
+						<InputLabel htmlFor='bio'>{t('t-bio')}</InputLabel>
+						<OutlinedInput
+							required
+							id='bio'
+							name='bio'
+							type='bio'
+							label={t('t-bio')}
+							value={formData.bio}
+							onChange={handleChange}
+						/>
+					</FormControl>
+
 					<FormControl fullWidth variant='outlined' margin='dense'>
 						<InputLabel
 							htmlFor='email'
