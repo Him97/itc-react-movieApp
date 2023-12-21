@@ -285,7 +285,12 @@ export default function Signup() {
 							onChange={handleChange}
 						/>
 					</FormControl>
-					<NativeSelect fullWidth onChange={handleChange} defaultValue=''>
+					<NativeSelect
+						fullWidth
+						onChange={handleChange}
+						name='country'
+						defaultValue=''
+					>
 						<option disabled value=''>
 							{t('t-country')}
 						</option>
@@ -295,7 +300,12 @@ export default function Signup() {
 							</option>
 						))}
 					</NativeSelect>
-					<NativeSelect fullWidth onChange={handleChange} defaultValue=''>
+					<NativeSelect
+						fullWidth
+						onChange={handleChange}
+						name='region'
+						defaultValue=''
+					>
 						<option disabled value=''>
 							{t('t-region')}
 						</option>

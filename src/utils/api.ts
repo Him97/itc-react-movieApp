@@ -62,7 +62,7 @@ interface ApiError  {
 
 const handleError = (error: AxiosError) => {
   if (typeof error === 'string') {
-    alert( error);
+    console.error( error);
   }
   if (error.response) {
     console.log('Status Code:', error.response.status);
@@ -71,13 +71,13 @@ const handleError = (error: AxiosError) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const responseData: ApiError|any = error.response.data;
     if (responseData && responseData.message) {
-      alert('Error: ' + responseData.message);
+      console.error('Error: ' + responseData.message);
     } else {
-      alert('An error occurred. Please try again.');
+      console.error('An error occurred. Please try again.');
     }
   } else if (error.request) {
-    alert('No response received');
+    console.error('No response received');
   } else {
-    alert(error.message);
+    console.error(error.message);
   }
 };

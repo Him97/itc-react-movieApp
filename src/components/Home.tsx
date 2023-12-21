@@ -510,6 +510,9 @@ export default function Home() {
 							>
 								{t('t-zelaze')}
 							</Typography>
+							<Typography component='h1' variant='h4' fontFamily='Markazi Text'>
+								| Meet the Team
+							</Typography>
 						</Box>
 						<Stack direction='row' spacing={2}>
 							{teammates.map((teammate) => (
