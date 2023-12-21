@@ -13,6 +13,7 @@ import { ColorModeContext } from './contexts/ColorMode';
 import { LocaleProvider } from './contexts/Locale';
 import { useLocale } from './utils/useLocale';
 import { SnackbarProvider } from './contexts/Snackbar';
+import { ScrollProvider } from './contexts/Scroll';
 
 export default function App() {
 	type ModeType = 'light' | 'dark';
@@ -75,20 +76,22 @@ export default function App() {
 				<LocaleProvider>
 					<UserProvider>
 						<SnackbarProvider>
-							<Box
-								component='center'
-								position='relative'
-								display='flex'
-								flexDirection='column'
-								minHeight='100vh'
-								sx={{ filter: open ? 'blur(5px)' : 'none' }}
-							>
-								<CssBaseline />
-								<Navbar colorMode={colorMode} handleOpen={handleOpen} />
-								<Router />
-								<Search open={open} handleClose={handleClose} />
-								<Footer />
-							</Box>
+							<ScrollProvider>
+								<Box
+									component='center'
+									position='relative'
+									display='flex'
+									flexDirection='column'
+									minHeight='100vh'
+									sx={{ filter: open ? 'blur(5px)' : 'none' }}
+								>
+									<CssBaseline />
+									<Navbar colorMode={colorMode} handleOpen={handleOpen} />
+									<Router />
+									<Search open={open} handleClose={handleClose} />
+									<Footer />
+								</Box>
+							</ScrollProvider>
 						</SnackbarProvider>
 					</UserProvider>
 				</LocaleProvider>

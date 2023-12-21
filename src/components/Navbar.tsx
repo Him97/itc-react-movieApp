@@ -5,7 +5,6 @@ import {
 	Button,
 	Container,
 	IconButton,
-	Link,
 	Menu,
 	MenuItem,
 	NativeSelect,
@@ -13,12 +12,14 @@ import {
 	Tooltip,
 	Typography,
 } from '@mui/material';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import HandshakeIcon from '@mui/icons-material/Handshake';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import TranslateIcon from '@mui/icons-material/Translate';
+import useScrollContext from '../utils/useScroll';
 import { useTheme } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';
 import { useLocale } from '../utils/useLocale';
@@ -34,11 +35,18 @@ interface NavbarProps {
 }
 
 export default function Navbar({ colorMode, handleOpen }: NavbarProps) {
+	const { scrollToSection } = useScrollContext();
 	const { language, setLanguage } = useLocale();
 	const { t } = useTranslation();
 	const theme = useTheme();
+	const navigate = useNavigate();
+	const location = useLocation();
+	const { pathname } = location;
 
-	const pages = ['Home', 'Services', 'About'];
+	const pages =
+		pathname === '/'
+			? ['Home', 'Services', 'About']
+			: ['Login', 'Signup', 'Profile'];
 
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
 		null
@@ -163,21 +171,19 @@ export default function Navbar({ colorMode, handleOpen }: NavbarProps) {
 					</Typography>
 					<Box flexGrow={1} display={{ xs: 'none', md: 'flex' }}>
 						{pages.map((page) => (
-							<Link
+							<Button
 								key={page}
-								variant='button'
-								onClick={handleCloseNavMenu}
-								m={2}
-								display='block'
-								sx={{ textDecoration: 'none' }}
-								color={
-									theme.palette.mode === 'dark'
-										? 'primary.light'
-										: 'primary.dark'
-								}
+								onClick={() => {
+									handleCloseNavMenu;
+									{
+										pathname === '/'
+											? scrollToSection(page)
+											: navigate(page.toLowerCase());
+									}
+								}}
 							>
 								{page}
-							</Link>
+							</Button>
 						))}
 					</Box>
 
@@ -226,6 +232,7 @@ export default function Navbar({ colorMode, handleOpen }: NavbarProps) {
 					</Box>
 				</Toolbar>
 			</Container>
+			<Outlet />
 		</AppBar>
 	);
 }

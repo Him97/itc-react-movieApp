@@ -23,8 +23,8 @@ export default function Home() {
 	const [text, setText] = React.useState<string>('');
 	const [delta, setDelta] = React.useState<number>(300 - Math.random() * 100);
 	const [createEntry, setCreateEntry] = React.useState<boolean>(false);
-
 	const parallax = React.useRef<IParallax>(null!);
+
 	const period: number = 2000;
 	const toRotate = [
 		'Zelaze',
@@ -226,7 +226,7 @@ export default function Home() {
 						justifyContent: 'center',
 					}}
 				>
-					<div>This is the second layer</div>
+					<div id='services'>This is the second layer</div>
 				</ParallaxLayer>
 
 				<ParallaxLayer
