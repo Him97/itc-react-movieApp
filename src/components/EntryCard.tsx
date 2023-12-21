@@ -149,6 +149,7 @@ export default function EntryCard() {
 						y,
 						scale: to([scale, zoom], (s, z) => s + z),
 						touchAction: 'none',
+						maxWidth: '50vw',
 					}}
 				>
 					<Grid
@@ -170,10 +171,11 @@ export default function EntryCard() {
 							sm={6}
 							md={6}
 							lg={6}
-							p={4}
 							display='flex'
 							flexDirection='column'
 							alignItems='center'
+							position='relative'
+							bgcolor='transparent'
 						>
 							{entry?.image && (
 								<img
@@ -192,7 +194,6 @@ export default function EntryCard() {
 								sx={{
 									display: 'flex',
 									flexDirection: 'column',
-									p: 0,
 									justifyContent: 'space-between',
 									alignItems: 'center',
 									position: 'relative',
@@ -257,7 +258,7 @@ export default function EntryCard() {
 									transitionDuration: '1s',
 								}}
 							>
-								<IconButton size='large' onClick={() => navigate('/signup')}>
+								<IconButton size='large'>
 									<HandshakeIcon
 										sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}
 										color='primary'
@@ -286,11 +287,13 @@ export default function EntryCard() {
 										color={
 											theme.palette.mode === 'dark' ? 'primary' : 'success'
 										}
-										style={{ height: '100%' }}
+										style={{
+											height: '100%',
+											backgroundColor: 'rgba(255,255,255,0.5)',
+											borderRadius: 2,
+										}}
 										multiline
-										minRows={10}
-										maxRows={10}
-										variant='standard'
+										variant='outlined'
 										onChange={(event) => setMessage(event.target.value)}
 									/>
 

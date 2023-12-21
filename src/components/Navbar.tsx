@@ -46,7 +46,7 @@ export default function Navbar({ colorMode, handleOpen }: NavbarProps) {
 	const pages =
 		pathname === '/'
 			? ['Home', 'Services', 'About']
-			: ['Login', 'Signup', 'Profile'];
+			: [t('t-login'), t('t-signup'), t('t-profile')];
 
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
 		null
@@ -197,7 +197,7 @@ export default function Navbar({ colorMode, handleOpen }: NavbarProps) {
 							size='large'
 							onClick={handleOpen}
 						>
-							Search
+							{t('t-search')}
 						</Button>
 						<NativeSelect
 							IconComponent={TranslateIcon}

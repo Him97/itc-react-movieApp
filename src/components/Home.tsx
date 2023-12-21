@@ -62,23 +62,23 @@ export default function Home() {
 	const teammates = [
 		{
 			name: 'Xin',
-			role: 'Frontend Developper | UX/UI Designer',
-			bio: 'Xin always wanted to push the project to another level, he is a passionate developper with great talent and expertise in web development...',
+			role: 'Frontend Developer | UX/UI Designer',
+			bio: 'Xin always wanted to push the project to another level, he is a passionate Developer with great talent and expertise in web development...',
 			avatar: xin,
 			github: 'https://github.com/him-li',
 			email: 'xin.li@outlook.co.il',
 		},
 		{
 			name: 'Njama',
-			role: 'Team Leader | Backend Developper',
-			bio: 'Njama has always the good words to motivate his people and he can crack any beug in one minute, the project owns him a lot! ',
+			role: 'Team Leader | Backend Developer',
+			bio: 'Njama has always the good words to motivate his people and he can crack any bug in one minute, the project owns him a lot! ',
 			avatar: njama,
 			github: 'https://github.com/IsmaelNjama',
 			email: 'petermailsnjama@gmail.com',
 		},
 		{
 			name: 'Hava',
-			role: 'Backend Developper | Strategic Operations Manager',
+			role: 'Backend Developer | Strategic Operations Manager',
 			bio: 'At the origin of the project, she led the business side, and coded the development backend.',
 			avatar: hava,
 			github: 'https://github.com/havalei',
