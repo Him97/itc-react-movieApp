@@ -173,6 +173,7 @@ export default function Navbar({ colorMode, handleOpen }: NavbarProps) {
 						{pages.map((page) => (
 							<Button
 								key={page}
+								color='inherit'
 								onClick={() => {
 									handleCloseNavMenu;
 									{
