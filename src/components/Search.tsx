@@ -403,7 +403,12 @@ export default function Search({ open, handleClose }: ModalProps) {
 												{entry.country + ' ' + entry.region}
 											</Typography>
 										</Stack>
-										<IconButton onClick={() => navigate(`/entry/${entry.id}`)}>
+										<IconButton
+											onClick={() => {
+												navigate(`/entry/${entry.id}`);
+												handleClose;
+											}}
+										>
 											<InfoIcon />
 										</IconButton>
 									</CardActions>

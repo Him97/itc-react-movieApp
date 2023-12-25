@@ -1,10 +1,12 @@
-import { Box, Link, Typography } from '@mui/material';
+import { Box, ButtonBase, Typography } from '@mui/material';
 import { useTheme } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 export default function Footer() {
 	const { t } = useTranslation();
 	const theme = useTheme();
+	const navigate = useNavigate();
 
 	return (
 		<Box
@@ -23,9 +25,13 @@ export default function Footer() {
 			<Typography color='text.secondary' maxWidth='sm'>
 				{t('t-copyright')}
 				{' © '}
-				<Link color='inherit' href='/'>
+				<ButtonBase
+					color='inherit'
+					style={{ fontFamily: 'Karla' }}
+					onClick={() => navigate('/')}
+				>
 					{t('t-zelaze')}
-				</Link>{' '}
+				</ButtonBase>{' '}
 				{new Date().getFullYear()}
 				{'.'}
 			</Typography>

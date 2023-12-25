@@ -86,8 +86,8 @@ export default function Navbar({ colorMode, handleOpen }: NavbarProps) {
 					<Typography
 						variant='h6'
 						noWrap
-						component='a'
-						href='/'
+						component='button'
+						onClick={() => navigate('/')}
 						color={
 							theme.palette.mode === 'dark' ? 'primary.light' : 'primary.dark'
 						}
@@ -98,6 +98,8 @@ export default function Navbar({ colorMode, handleOpen }: NavbarProps) {
 						mr={2}
 						sx={{
 							textDecoration: 'none',
+							border: 'none',
+							bgcolor: 'transparent',
 						}}
 					>
 						{t('t-zelaze')}
@@ -154,8 +156,8 @@ export default function Navbar({ colorMode, handleOpen }: NavbarProps) {
 					<Typography
 						variant='h5'
 						noWrap
-						component='a'
-						href='/'
+						component='button'
+						onClick={() => navigate('/')}
 						color={
 							theme.palette.mode === 'dark' ? 'primary.light' : 'primary.dark'
 						}
@@ -165,7 +167,11 @@ export default function Navbar({ colorMode, handleOpen }: NavbarProps) {
 						fontFamily='monospace'
 						fontWeight={700}
 						letterSpacing='.3rem'
-						sx={{ textDecoration: 'none' }}
+						sx={{
+							textDecoration: 'none',
+							border: 'none',
+							bgcolor: 'transparent',
+						}}
 					>
 						{t('t-zelaze')}
 					</Typography>
